@@ -9,11 +9,29 @@ public class InfortacticsUVa {
 
         // Limpiamos la terminal para mayor claridad visual
         Methods.flushScreen();
+
+        // Mostramos el menu inicial
+        printMenu();
         
 
         // Cerramos el objeto Scanner in
         in.close();
     }
+
+
+    // Funcion para mostrar el menu inicial del juego
+    public static void printMenu() {
+        System.out.println("┌─────────────────────────────────┐");
+        System.out.println("│      🏯 InforTactics UVa 🏯     │");
+        System.out.println("├─────────────────────────────────┤");
+        System.out.println("│   1. NUEVA PARTIDA              │");
+        System.out.println("│   2. CONFIGURAR BARAJA          │");
+        System.out.println("│   3. GUARDAR BARAJA             │");
+        System.out.println("│   4. CARGAR BARAJA              │");
+        System.out.println("│   5. SALIR                      │");
+        System.out.println("└─────────────────────────────────┘");
+        System.out.println();
+       
 
     /**
      * Procedimiento que muestra por pantalla el tablero de juego. Mapea los
