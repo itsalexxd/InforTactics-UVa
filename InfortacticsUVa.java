@@ -124,6 +124,7 @@ public class InfortacticsUVa {
     // Funcion para imprimir el elixir del jugador
     public static void printElixir(int elixir) {
         System.out.println("Elixir Restante 🩸: " + elixir);
+        System.out.println("-----------------------------------------------------");
     }
 
     /**
