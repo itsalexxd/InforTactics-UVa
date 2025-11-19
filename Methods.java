@@ -414,7 +414,7 @@ public class Methods {
 
     /**
      * Procedimiento que escribe en un vector de Strings todas las posiciones a
-     * cadenas vac�as
+     * cadenas vacias
      *
      * @author Alejandro Ortega
      * @param deck Referencia del vector a inicializar
@@ -429,8 +429,8 @@ public class Methods {
      * Funci�n que ejecuta los porcentajes de lucha entre dos personajes
      *
      * @author Alejandro Ortega
-     * @param attackerSymbol Car�cter del s�mbolo que ataca
-     * @param defenderSymbol Car�cter del s�mbolo que defiende
+     * @param attackerSymbol Caracter del s�mbolo que ataca
+     * @param defenderSymbol Caracter del s�mbolo que defiende
      * @return	V: Atacante ha matado a defensor, F: Atacante NO ha matado a
      * defensor
      */

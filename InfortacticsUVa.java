@@ -7,11 +7,48 @@ public class InfortacticsUVa {
         // Creo el objeto in Scanner
         Scanner in = new Scanner(System.in);
 
+        String[] gameDeck = new String[Assets.INITIAL_ELIXIR];
+
         // Limpiamos la terminal para mayor claridad visual
         Methods.flushScreen();
 
         // Mostramos el menu inicial
         printMenu();
+        System.out.print("Inserte una opción [1-5]: ");
+        String option = in.nextLine();
+
+        switch (option){
+            case "1" -> // Nueva Partida
+                System.out.println("Iniciando nueva partida...");
+            // Aqui iria la logica para iniciar una nueva partida
+
+            case "2" -> {// Configurar Baraja
+                // 1. Limpiamos
+                Methods.flushScreen();
+                
+                // 2. Mostramos la situacion actual del tablero y la informacion de los personajes
+                printBoard(gameDeck);
+                printCharactersInfo();
+            }
+
+            case "3" -> // Guardar Baraja
+                System.out.println("Guardando baraja...");
+            // Aqui iria la logica para guardar la baraja
+
+            case "4" -> // Cargar Baraja
+                System.out.println("Cargando baraja...");
+            // Aqui iria la logica para cargar la baraja
+
+            case "5" -> {
+                // Salir
+                System.out.println("Saliendo del juego. ¡Hasta luego!");
+                System.exit(0);
+            }
+            default -> {
+                System.out.println("Opción no válida. Por favor, seleccione una opción del 1 al 5.");
+                option = in.nextLine();
+            }
+            }
         
 
         // Cerramos el objeto Scanner in
@@ -31,7 +68,54 @@ public class InfortacticsUVa {
         System.out.println("│   5. SALIR                      │");
         System.out.println("└─────────────────────────────────┘");
         System.out.println();
-       
+    }
+
+    // Funcion para imprimir por pantalla la informacion de los personajes
+    public static void printCharactersInfo() {
+    System.out.println("\nPERSONAJES DISPONIBLES:");
+    
+    // 1. Cabecera (6 campos: Icono/Nombre, Símb, Elixir, Ataque[d], Defensa[d])
+    // Usaremos %-15s para el campo de Icono/Nombre.
+    System.out.printf("%-15s %-6s %-6s %-8s %-8s%n", "Personaje", "Símb.", "Elixir", "%Ataque", "%Defensa");
+    System.out.println("-----------------------------------------------------");
+
+    // 2. Líneas de Datos (Icono + Nombre combinados, y usar %d para números)
+
+    // Formato de Datos: %-15s (Icono + Nombre) %-6s (Símbolo) %-6d (Elixir) %-8d (Ataque) %-8d (Defensa)
+    
+    // Arquera
+    System.out.printf("%-15s %-6s %-6d %-8d %-8d%n", 
+                      Assets.ARCHER_IMAGE + " " + Assets.ARCHER_NAME, 
+                      Assets.ARCHER_SYMBOL, Assets.ARCHER_ELIXIR, Assets.ARCHER_ATTACK, Assets.ARCHER_DEFENSE);
+    
+    // Dragón
+    System.out.printf("%-15s %-6s %-6d %-8d %-8d%n", 
+                      Assets.DRAGON_IMAGE + " " + Assets.DRAGON_NAME, 
+                      Assets.DRAGON_SYMBOL, Assets.DRAGON_ELIXIR, Assets.DRAGON_ATTACK, Assets.DRAGON_DEFENSE);
+    
+    // Princesa
+    System.out.printf("%-15s %-6s %-6d %-8d %-8d%n", 
+                      Assets.PRINCESS_IMAGE + " " + Assets.PRINCESS_NAME, 
+                      Assets.PRINCESS_SYMBOL, Assets.PRINCESS_ELIXIR, Assets.PRINCESS_ATTACK, Assets.PRINCESS_DEFENSE);
+    
+    // Valquiria
+    System.out.printf("%-15s %-6s %-6d %-8d %-8d%n", 
+                      Assets.VALKYRIE_IMAGE + "  " + Assets.VALKYRIE_NAME,
+                      Assets.VALKYRIE_SYMBOL, Assets.VALKYRIE_ELIXIR, Assets.VALKYRIE_ATTACK, Assets.VALKYRIE_DEFENSE);
+    
+    // Goblin
+    System.out.printf("%-15s %-6s %-6d %-8d %-8d%n", 
+                      Assets.GOBLIN_IMAGE + " " + Assets.GOBLIN_NAME, 
+                      Assets.GOBLIN_SYMBOL, Assets.GOBLIN_ELIXIR, Assets.GOBLIN_ATTACK, Assets.GOBLIN_DEFENSE);
+    
+    // P.E.K.K.A
+    System.out.printf("%-15s %-6s %-6d %-8d %-8d%n", 
+                      Assets.PK_IMAGE + " " + Assets.PK_NAME, 
+                      Assets.PK_SYMBOL, Assets.PK_ELIXIR, Assets.PK_ATTACK, Assets.PK_DEFENSE);
+                      
+    System.out.println("-----------------------------------------------------");
+    System.out.println();
+}
 
     /**
      * Procedimiento que muestra por pantalla el tablero de juego. Mapea los
@@ -133,5 +217,18 @@ public class InfortacticsUVa {
         }
         System.out.println("┘");
     }// Fin printBoard
+
+
+    // Funcion para configurar el tablero
+    public static void cofigureDeck(Scanner in, String[] gameDeck) {
+        boolean terminado = false;
+
+        // Bucle para la configuracion de la baraja del jugador
+        while (!terminado) {
+            // 1. Mostramos el tablero y la informacion de los personajes
+            printBoard(gameDeck);
+
+        }
+    }
 
 }
