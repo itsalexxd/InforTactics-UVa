@@ -8,6 +8,7 @@ public class InfortacticsUVa {
         Scanner in = new Scanner(System.in);
 
         String[] gameDeck = new String[Assets.INITIAL_ELIXIR];
+        int elixir = Assets.INITIAL_ELIXIR;
 
         // Limpiamos la terminal para mayor claridad visual
         Methods.flushScreen();
@@ -29,6 +30,7 @@ public class InfortacticsUVa {
                 // 2. Mostramos la situacion actual del tablero y la informacion de los personajes
                 printBoard(gameDeck);
                 printCharactersInfo();
+                printElixir(elixir);
             }
 
             case "3" -> // Guardar Baraja
@@ -114,8 +116,12 @@ public class InfortacticsUVa {
                       Assets.PK_SYMBOL, Assets.PK_ELIXIR, Assets.PK_ATTACK, Assets.PK_DEFENSE);
                       
     System.out.println("-----------------------------------------------------");
-    System.out.println();
-}
+}// Fin printCharactersInfo
+
+    // Funcion para imprimir el elixir del jugador
+    public static void printElixir(int elixir) {
+        System.out.println("Elixir Restante 🩸: " + elixir);
+    }
 
     /**
      * Procedimiento que muestra por pantalla el tablero de juego. Mapea los
@@ -220,15 +226,51 @@ public class InfortacticsUVa {
 
 
     // Funcion para configurar el tablero
-    public static void cofigureDeck(Scanner in, String[] gameDeck) {
+    public static void cofigureDeck(Scanner in, String[] gameDeck, String[] playerDeck) {
+        String input;
         boolean terminado = false;
 
         // Bucle para la configuracion de la baraja del jugador
         while (!terminado) {
-            // 1. Mostramos el tablero y la informacion de los personajes
+            // 1. Mostramos el tablero, la informacion de los personajes y el elixir actual
             printBoard(gameDeck);
+            printCharactersInfo();
+            int currentElixir = calculateCurrentElixir(playerDeck);
+            printElixir(currentElixir);
 
+            // 2. Pedimos la jugada al usuario
+            System.out.println("[X] para borrar [0] para guardar y salir");
+            System.out.print("Inserte una jugada [SXY]: ");
+            input = in.nextLine().toUpperCase();
+
+            // Input tiene que ser de 3 caracteres (SXY) o comandos especiales
+            // Comprobamos si es un comando especial
+            if (input.length() == 1){
+                if (input == "X"){
+                    // Borramos jugada
+                }else if (input == "O"){
+                    // Guardamos y salimos
+                    terminado = true;
+                } else {
+                    System.out.println("Comando no válido.");
+                    System.out.print("Inserte una jugada valida [SXY]: ");
+                    input = in.nextLine().toUpperCase();
+                }
+            }else if (input.length() == 3) {
+                // Recogemos los datos del personaje y la jugada
+                
+            } else {
+                System.out.println("Jugada no válida.");
+                System.out.print("Inserte una jugada valida [SXY]: ");
+                input = in.nextLine().toUpperCase();
+            }   
         }
+    }
+
+    // Funcion para calcular el elixir actual del jugador
+    public static int calculateCurrentElixir(String[] playerDeck) {
+        int totalElixir = 0;
+        return totalElixir;
     }
 
 }
