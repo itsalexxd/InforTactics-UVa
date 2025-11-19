@@ -31,6 +31,9 @@ public class InfortacticsUVa {
                 printBoard(gameDeck);
                 printCharactersInfo();
                 printElixir(elixir);
+
+                // 3. Configuramos la baraja del jugador
+                cofigureDeck(in, gameDeck, gameDeck);
             }
 
             case "3" -> // Guardar Baraja
@@ -232,6 +235,9 @@ public class InfortacticsUVa {
 
         // Bucle para la configuracion de la baraja del jugador
         while (!terminado) {
+            // Limpiamos la terminal
+            Methods.flushScreen();
+
             // 1. Mostramos el tablero, la informacion de los personajes y el elixir actual
             printBoard(gameDeck);
             printCharactersInfo();
@@ -246,9 +252,14 @@ public class InfortacticsUVa {
             // Input tiene que ser de 3 caracteres (SXY) o comandos especiales
             // Comprobamos si es un comando especial
             if (input.length() == 1){
-                if (input == "X"){
+                if (input.equals("X")){
                     // Borramos jugada
-                }else if (input == "O"){
+                        // Pedimos la jugada a borrar
+                        // Validamos que es correcta
+                        // La borramos de la baraja del jugador
+                        // Devolvemos el elixir correspondiente
+                    // Volvemos al menu de configuracion
+                }else if (input.equals("O")){
                     // Guardamos y salimos
                     terminado = true;
                 } else {
@@ -258,7 +269,12 @@ public class InfortacticsUVa {
                 }
             }else if (input.length() == 3) {
                 // Recogemos los datos del personaje y la jugada
-                
+                char symbol = input.charAt(0);
+                // Fila
+                int x = input.charAt(1);
+                // Columna
+                int y = input.charAt(2);
+                // Comprobamos si la jugada es valida
             } else {
                 System.out.println("Jugada no válida.");
                 System.out.print("Inserte una jugada valida [SXY]: ");
