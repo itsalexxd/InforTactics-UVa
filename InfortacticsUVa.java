@@ -17,40 +17,44 @@ public class InfortacticsUVa {
         String option = "";
         option = printMenu(in, option);
 
-        switch (option) {
-            case "1" -> // Nueva Partida
-                System.out.println("Iniciando nueva partida...");
-            // Aqui iria la logica para iniciar una nueva partida
+        // Bucle para el juego entero
+        boolean finJuego = false;
+        while (!finJuego) {
+            switch (option) {
+                case "1" -> // Nueva Partida
+                    System.out.println("Iniciando nueva partida...");
+                // Aqui iria la logica para iniciar una nueva partida
 
-            case "2" -> {// Configurar Baraja
-                // 1. Limpiamos
-                Methods.flushScreen();
+                case "2" -> {// Configurar Baraja
+                    // 1. Limpiamos
+                    Methods.flushScreen();
 
-                // 2. Mostramos la situacion actual del tablero y la informacion de los personajes
-                printBoard(gameDeck);
-                printCharactersInfo();
-                printElixir(elixir);
+                    // 2. Mostramos la situacion actual del tablero y la informacion de los personajes
+                    printBoard(gameDeck);
+                    printCharactersInfo();
+                    printElixir(elixir);
 
-                // 3. Configuramos la baraja del jugador
-                cofigureDeck(in, gameDeck, gameDeck);
-            }
+                    // 3. Configuramos la baraja del jugador
+                    cofigureDeck(in, gameDeck, gameDeck);
+                }
 
-            case "3" -> // Guardar Baraja
-                System.out.println("Guardando baraja...");
-            // Aqui iria la logica para guardar la baraja
+                case "3" -> // Guardar Baraja
+                    System.out.println("Guardando baraja...");
+                // Aqui iria la logica para guardar la baraja
 
-            case "4" -> // Cargar Baraja
-                System.out.println("Cargando baraja...");
-            // Aqui iria la logica para cargar la baraja
+                case "4" -> // Cargar Baraja
+                    System.out.println("Cargando baraja...");
+                // Aqui iria la logica para cargar la baraja
 
-            case "5" -> {
-                // Salir
-                System.out.println("Saliendo del juego. ¡Hasta luego!");
-                System.exit(0);
-            }
-            default -> {
-                System.out.println("Opción no válida. Por favor, seleccione una opción del 1 al 5.");
-                option = in.nextLine();
+                case "5" -> {
+                    // Salir
+                    System.out.println("Saliendo del juego. ¡Hasta luego!");
+                    System.exit(0);
+                }
+                default -> {
+                    System.out.println("Opción no válida. Por favor, seleccione una opción del 1 al 5.");
+                    option = in.nextLine();
+                }
             }
         }
 
