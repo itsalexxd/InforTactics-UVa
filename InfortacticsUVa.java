@@ -14,9 +14,8 @@ public class InfortacticsUVa {
         Methods.flushScreen();
 
         // Mostramos el menu inicial
-        printMenu();
-        System.out.print("Inserte una opción [1-5]: ");
-        String option = in.nextLine();
+        String option = "";
+        option = printMenu(in, option);
 
         switch (option) {
             case "1" -> // Nueva Partida
@@ -60,7 +59,7 @@ public class InfortacticsUVa {
     }
 
     // Funcion para mostrar el menu inicial del juego
-    public static void printMenu() {
+    public static String printMenu(Scanner in, String option) {
         System.out.println("┌─────────────────────────────────┐");
         System.out.println("│      🏯 InforTactics UVa 🏯     │");
         System.out.println("├─────────────────────────────────┤");
@@ -71,6 +70,9 @@ public class InfortacticsUVa {
         System.out.println("│   5. SALIR                      │");
         System.out.println("└─────────────────────────────────┘");
         System.out.println();
+        System.out.print("Inserte una opción [1-5]: ");
+        option = in.nextLine();
+        return option;
     }
 
     // Funcion para imprimir por pantalla la informacion de los personajes
