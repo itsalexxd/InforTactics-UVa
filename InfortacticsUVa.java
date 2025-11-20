@@ -287,15 +287,7 @@ public class InfortacticsUVa {
                 // Columna
                 int y = input.charAt(2);
                 // Comprobamos si la jugada es valida
-                if (x >= 3 && x < Assets.BOARD_ROWS && y >= 3 && y < Assets.BOARD_COLUMNS) {
-                    // Comprobamos si el personaje existe
-                    if (symbol == Assets.ARCHER_SYMBOL || symbol == Assets.DRAGON_SYMBOL ||
-                            symbol == Assets.PRINCESS_SYMBOL || symbol == Assets.VALKYRIE_SYMBOL ||
-                            symbol == Assets.GOBLIN_SYMBOL || symbol == Assets.PK_SYMBOL) {
-                        
-
-                    }
-                }
+                
             } else {
                 System.out.println("Jugada no válida.");
                 System.out.print("Inserte una jugada valida [SXY]: ");
