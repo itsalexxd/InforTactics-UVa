@@ -36,6 +36,9 @@ public class InfortacticsUVa {
 
                     // 3. Configuramos la baraja del jugador
                     cofigureDeck(in, gameDeck, gameDeck);
+
+                    // 4. Volvemos a imprimir el menu inicial
+                    option = printMenu(in, option);
                 }
 
                 case "3" -> // Guardar Baraja
@@ -251,6 +254,9 @@ public class InfortacticsUVa {
             System.out.print("Inserte una jugada [SXY]: ");
             input = in.nextLine().toUpperCase();
 
+            // Limpiamos la terinal
+            Methods.flushScreen();
+
             // Input tiene que ser de 3 caracteres (SXY) o comandos especiales
             // Comprobamos si es un comando especial
             if (input.length() == 1) {
@@ -262,8 +268,12 @@ public class InfortacticsUVa {
                     // Devolvemos el elixir correspondiente
                     // Volvemos al menu de configuracion
                 } else if (input.equals("O")) {
-                    // Guardamos y salimos
+                    // Limpiamos la terminal
+                    Methods.flushScreen();
+
+                    // Salimos de la configuracion
                     terminado = true;
+
                 } else {
                     System.out.println("Comando no válido.");
                     System.out.print("Inserte una jugada valida [SXY]: ");
@@ -277,6 +287,15 @@ public class InfortacticsUVa {
                 // Columna
                 int y = input.charAt(2);
                 // Comprobamos si la jugada es valida
+                if (x >= 3 && x < Assets.BOARD_ROWS && y >= 3 && y < Assets.BOARD_COLUMNS) {
+                    // Comprobamos si el personaje existe
+                    if (symbol == Assets.ARCHER_SYMBOL || symbol == Assets.DRAGON_SYMBOL ||
+                            symbol == Assets.PRINCESS_SYMBOL || symbol == Assets.VALKYRIE_SYMBOL ||
+                            symbol == Assets.GOBLIN_SYMBOL || symbol == Assets.PK_SYMBOL) {
+                        
+
+                    }
+                }
             } else {
                 System.out.println("Jugada no válida.");
                 System.out.print("Inserte una jugada valida [SXY]: ");
