@@ -15,7 +15,6 @@ public class prueba {
 
         // Limpiar pantalla inicial
         Methods.flushScreen();
-        Methods.fuslhScreen();
 
         String option = printMenu(in);
 
