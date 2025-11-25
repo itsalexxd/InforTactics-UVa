@@ -7,7 +7,8 @@ public class InfortacticsUVa {
         // Creo el objeto in Scanner
         Scanner in = new Scanner(System.in);
 
-        String[] gameDeck = new String[Assets.INITIAL_ELIXIR];
+        // 
+        String[] playerDeck = new String[Assets.INITIAL_ELIXIR];
         int elixir = Assets.INITIAL_ELIXIR;
 
         // Limpiamos la terminal para mayor claridad visual
@@ -30,12 +31,12 @@ public class InfortacticsUVa {
                     Methods.flushScreen();
 
                     // 2. Mostramos la situacion actual del tablero y la informacion de los personajes
-                    printBoard(gameDeck);
+                    printBoard(playerDeck);
                     printCharactersInfo();
                     printElixir(elixir);
 
                     // 3. Configuramos la baraja del jugador
-                    cofigureDeck(in, gameDeck, gameDeck);
+                    cofigureDeck(in, playerDeck, playerDeck);
 
                     // 4. Volvemos a imprimir el menu inicial
                     option = printMenu(in, option);
@@ -85,8 +86,7 @@ public class InfortacticsUVa {
     // Funcion para imprimir por pantalla la informacion de los personajes
     public static void printCharactersInfo() {
         System.out.println("\nPERSONAJES DISPONIBLES:");
-                System.out.println("-----------------------------------------------------");
-
+        System.out.println("-----------------------------------------------------");
 
         // 1. Cabecera (6 campos: Icono/Nombre, Símb, Elixir, Ataque[d], Defensa[d])
         // Usaremos %-15s para el campo de Icono/Nombre.
@@ -235,7 +235,7 @@ public class InfortacticsUVa {
             }
         }
         System.out.println("┘");
-        
+
         System.out.println();
         System.out.println();
 
@@ -248,7 +248,14 @@ public class InfortacticsUVa {
      * @param playerDeck
      */
     public static void cofigureDeck(Scanner in, String[] gameDeck, String[] playerDeck) {
+        // Variable para el input del usuario
         String input;
+        String borrar;
+
+        // Variable para el elixir actual del jugador
+        int currentElixir;
+
+        // Variable de control del bucle
         boolean terminado = false;
 
         // Bucle para la configuracion de la baraja del jugador
@@ -259,7 +266,7 @@ public class InfortacticsUVa {
             // 1. Mostramos el tablero, la informacion de los personajes y el elixir actual
             printBoard(gameDeck);
             printCharactersInfo();
-            int currentElixir = calculateCurrentElixir(playerDeck);
+            currentElixir = calculateCurrentElixir(playerDeck);
             printElixir(currentElixir);
 
             // 2. Pedimos la jugada al usuario
@@ -272,70 +279,133 @@ public class InfortacticsUVa {
 
             // Input tiene que ser de 3 caracteres (SXY) o comandos especiales
             // Comprobamos si es un comando especial
-            if (input.length() == 1) {
-                if (input.equals("X")) {
-                    // Borramos jugada
-                    // Pedimos la jugada a borrar
-                    // Validamos que es correcta
-                    // La borramos de la baraja del jugador
-                    // Devolvemos el elixir correspondiente
-                    // Volvemos al menu de configuracion
-                } else if (input.equals("O")) {
-                    // Limpiamos la terminal
-                    Methods.flushScreen();
+            switch (input.length()) {
+                // Longitud 1: Comando especial [X, borrar personaje] [O, guardar baraja y salir]
+                case 1:
+                    // Caad caso de los comandos especiales
+                    switch (input) {
+                        // Borrar jugada
+                        case "X":
+                            // Limpiamos la terminal
+                            Methods.flushScreen();
 
-                    // Salimos de la configuracion
-                    terminado = true;
+                            // 1. Mostramos el tablero, la informacion de los personajes y el elixir actual
+                            printBoard(gameDeck);
+                            printCharactersInfo();
+                            currentElixir = calculateCurrentElixir(playerDeck);
+                            printElixir(currentElixir);
 
-                } else {
-                    System.out.println("Comando no válido.");
-                    System.out.print("Inserte una jugada valida [SXY]: ");
-                    input = in.nextLine().toUpperCase();
-                }
-            } else if (input.length() == 3) {
-                // Recogemos los datos del personaje y la jugada
-                char symbol = input.charAt(0);
-                // Fila
-                int x = input.charAt(1);
-                // Columna
-                int y = input.charAt(2);
+                            // Pedimos la jugada a borrar
+                            System.out.print("Inserta la jugada a borrar [XY]: ");
+                            borrar = in.nextLine().toUpperCase().trim();
+                            // Validamos que la entrada es correcta
+                            switch (borrar.length()) {
+                                // Longitud 2: Borrar jugada XY
+                                case 2:
+                                    // Fila
+                                    int x = borrar.charAt(0);
+                                    // Columna
+                                    int y = borrar.charAt(1);
 
-                // Comprobamos si la jugada es valida
-                if (symbol == 'A' || symbol == 'D' || symbol == 'P' || symbol == 'V' || symbol == 'G' || symbol == 'K') {
-                    if (x >= '0' && x <= '5' && y >= '3' && y <= '5') {
-                        // Comprobamos si hay suficiente elixir
-                        int characterElixir = Methods.getCharacterElixir(symbol);
-                        if (currentElixir + characterElixir <= Assets.INITIAL_ELIXIR) {
-                            // Añadimos la jugada a la baraja del jugador
-                            gameDeck[] = input;
-                            // Restamos el elixir correspondiente
-                            System.out.println("Jugada añadida correctamente.");
+                                    // Validamos que la entrada es valida
+                                    if (x >= '0' && x <= '5' && y >= '3' && y <= '5') {
+
+                                        // Posiciones no validas, mostramos el error y lo volvemos a pedir
+                                    } else {
+                                        // Limpiamos la terminal
+                                        Methods.flushScreen();
+
+                                        // 1. Mostramos el tablero, la informacion de los personajes y el elixir actual
+                                        printBoard(gameDeck);
+                                        printCharactersInfo();
+                                        currentElixir = calculateCurrentElixir(playerDeck);
+                                        printElixir(currentElixir);
+
+                                        // Mensaje de error
+                                        System.out.println("Coordenadas fuera de rango. Deben estar en la mitad inferior del tablero (X: 0-5, Y: 3-5).");
+
+                                        // 2. Pedimos la jugada al usuario
+                                        System.out.println("[X] para borrar [0] para guardar y salir");
+                                        System.out.print("Inserte una jugada [SXY]: ");
+                                        input = in.nextLine().toUpperCase();
+                                    }
+                                    break;// Fin case longitud 2 borrar
+                                default:
+                                    System.out.println("Entrada no válida. Debe ser de la forma [XY].");
+                                    break;
+                            }// Fin switch validar entrada borrar
+                            break;
+
+                        // Salir
+                        case "0":
+                            // Limpiamos la terminal
+                            Methods.flushScreen();
+                            // Salimos de la configuracion
+                            terminado = true;
+                            break;
+
+                        // Error en la entrada del usuario    
+                        default:
+                            // Limpiamos la terminal
+                            Methods.flushScreen();
+
+                            // Mostramos el tablero, la informacion de los personajes y el elixir actual
+                            printBoard(gameDeck);
+                            printCharactersInfo();
+                            currentElixir = calculateCurrentElixir(playerDeck);
+                            printElixir(currentElixir);
+
+                            System.out.println("Comando no válido.");
+                            System.out.print("Inserte una jugada valida [SXY]: ");
+                            input = in.nextLine().toUpperCase();
+                            break;
+                    }
+                    break;// Fin switch comandos especiales
+
+                // Longitud 3: Jugada SXY
+                case 3:
+                    // Recogemos los datos del personaje y la jugada
+                    char symbol = input.charAt(0);
+                    // Fila
+                    int x = input.charAt(1);
+                    // Columna
+                    int y = input.charAt(2);
+                    // Comprobamos si la jugada es valida
+                    if (symbol == 'A' || symbol == 'D' || symbol == 'P' || symbol == 'V' || symbol == 'G' || symbol == 'K') {
+                        if (x >= '0' && x <= '5' && y >= '3' && y <= '5') {
+                            // Comprobamos si hay suficiente elixir
+                            int characterElixir = Methods.getCharacterElixir(symbol);
+                            if (currentElixir + characterElixir <= Assets.INITIAL_ELIXIR) {
+                                // Añadimos la jugada a la baraja del jugador
+                                // playerDeck[] = input;
+                                // Restamos el elixir correspondiente
+                                System.out.println("Jugada añadida correctamente.");
+                            } else {
+                                System.out.println("No tienes suficiente elixir para esta jugada.");
+                                System.out.print("Inserte una jugada valida [SXY]: ");
+                                input = in.nextLine().toUpperCase();
+                            }
+
+                            // Coordenadas no validas
                         } else {
-                            System.out.println("No tienes suficiente elixir para esta jugada.");
+                            System.out.println("Coordenadas fuera de rango. Deben estar en la mitad inferior del tablero (X: 0-5, Y: 3-5).");
                             System.out.print("Inserte una jugada valida [SXY]: ");
                             input = in.nextLine().toUpperCase();
                         }
 
-                    // Coordenadas no validas
+                        // Personaje no valido
                     } else {
-                        System.out.println("Coordenadas fuera de rango. Deben estar en la mitad inferior del tablero (X: 0-5, Y: 3-5).");
+                        System.out.println("Símbolo de personaje no válido.");
                         System.out.print("Inserte una jugada valida [SXY]: ");
                         input = in.nextLine().toUpperCase();
+
                     }
-                
-                // Personaje no valido
-                } else {
-                    System.out.println("Símbolo de personaje no válido.");
+                    break;
+                default:
+                    System.out.println("Jugada no válida.");
                     System.out.print("Inserte una jugada valida [SXY]: ");
                     input = in.nextLine().toUpperCase();
-
-                }
-
-
-            } else {
-                System.out.println("Jugada no válida.");
-                System.out.print("Inserte una jugada valida [SXY]: ");
-                input = in.nextLine().toUpperCase();
+                    break;
             }
         }
     }

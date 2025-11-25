@@ -7,7 +7,11 @@ public class prueba {
 
     public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
-        String[] playerDeck = new String[Assets.INITIAL_ELIXIR]; // Baraja del jugador (máx 8 personajes)
+
+        // Baraja del jugador
+        String[] playerDeck = new String[Assets.INITIAL_ELIXIR];
+
+        // Elixir inicial
         int elixir = Assets.INITIAL_ELIXIR;
 
         // Inicializar baraja del jugador vacía
@@ -204,10 +208,12 @@ public class prueba {
         boolean finished = false;
         while (!finished) {
             Methods.flushScreen();
+
             printBoard(playerDeck);
             printCharactersInfo();
             int currentElixir = calculateCurrentElixir(playerDeck);
             printElixir(currentElixir);
+
             System.out.println("[X] para borrar [0] para guardar y salir");
             System.out.print("Inserte una jugada [SXY]: ");
             String input = in.nextLine().toUpperCase().trim();
