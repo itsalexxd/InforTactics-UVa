@@ -7,7 +7,7 @@ public class InfortacticsUVa {
         // Creo el objeto in Scanner
         Scanner in = new Scanner(System.in);
 
-        // 
+        // Baraja del jugador 
         String[] playerDeck = new String[Assets.INITIAL_ELIXIR];
         int elixir = Assets.INITIAL_ELIXIR;
 
@@ -64,8 +64,12 @@ public class InfortacticsUVa {
 
         // Cerramos el objeto Scanner in
         in.close();
-    }
+    }// Fin main
 
+    // =================================================================
+    //                          MÉTODOS AUXILIARES
+    // =================================================================
+    //
     // Funcion para mostrar el menu inicial del juego
     public static String printMenu(Scanner in, String option) {
         System.out.println("┌─────────────────────────────────┐");
@@ -85,7 +89,7 @@ public class InfortacticsUVa {
 
     // Funcion para imprimir por pantalla la informacion de los personajes
     public static void printCharactersInfo() {
-        System.out.println("\nPERSONAJES DISPONIBLES:");
+        System.out.println("PERSONAJES DISPONIBLES:");
         System.out.println("-----------------------------------------------------");
 
         // 1. Cabecera (6 campos: Icono/Nombre, Símb, Elixir, Ataque[d], Defensa[d])
@@ -331,7 +335,20 @@ public class InfortacticsUVa {
                                     }
                                     break;// Fin case longitud 2 borrar
                                 default:
+                                    // Limpiamos la terminal
+                                    Methods.flushScreen();
+
+                                    // 1. Mostramos el tablero, la informacion de los personajes y el elixir actual
+                                    printBoard(gameDeck);
+                                    printCharactersInfo();
+                                    currentElixir = calculateCurrentElixir(playerDeck);
+                                    printElixir(currentElixir);
                                     System.out.println("Entrada no válida. Debe ser de la forma [XY].");
+
+                                    // 2. Pedimos la jugada al usuario
+                                    System.out.println("[X] para borrar [0] para guardar y salir");
+                                    System.out.print("Inserte una jugada [SXY]: ");
+                                    input = in.nextLine().toUpperCase();
                                     break;
                             }// Fin switch validar entrada borrar
                             break;

@@ -20,11 +20,14 @@ public class prueba {
         // Limpiar pantalla inicial
         Methods.flushScreen();
 
+        // Variable para recoger la opcion del menu
         String option = printMenu(in);
 
+        // Bucle principal del menu
         while (true) {
             switch (option) {
-                case "1" -> { // Nueva Partida
+                // Nueva partida
+                case "1" -> {
                     if (hasCharacters(playerDeck)) {
                         String[] enemyDeck = loadRandomEnemyDeck();
                         if (enemyDeck != null) {
@@ -41,12 +44,16 @@ public class prueba {
                     }
                     option = printMenu(in);
                 }
-                case "2" -> { // Configurar Baraja
+
+                // Configurar Baraja
+                case "2" -> {
                     configureDeck(in, playerDeck);
                     elixir = calculateCurrentElixir(playerDeck); // Recalcular elixir después de configurar
                     option = printMenu(in);
                 }
-                case "3" -> { // Guardar Baraja
+
+                // Guardar Baraja
+                case "3" -> {
                     if (saveDeck(playerDeck)) {
                         System.out.println("Baraja guardada correctamente.");
                     } else {
@@ -54,7 +61,9 @@ public class prueba {
                     }
                     option = printMenu(in);
                 }
-                case "4" -> { // Cargar Baraja
+
+                // Cargar Baraja
+                case "4" -> {
                     if (loadDeck(playerDeck)) {
                         elixir = calculateCurrentElixir(playerDeck);
                         System.out.println("Baraja cargada correctamente.");
@@ -63,14 +72,22 @@ public class prueba {
                     }
                     option = printMenu(in);
                 }
-                case "5" -> { // Salir
+
+                // Salir
+                case "5" -> {
                     System.out.println("¡Hasta luego!");
                     in.close();
                     System.exit(0);
                 }
+
                 default -> {
-                    System.out.println("Opción no válida.");
-                    option = printMenu(in);
+                    // Limpiamos la pantalla
+                    Methods.flushScreen();
+
+                    // Mostramos de nuevo el menu
+                    System.out.println("Opción no válida. Por favor, seleccione una opción del 1 al 5.");
+                    printMenu(in);
+
                 }
             }
         }
