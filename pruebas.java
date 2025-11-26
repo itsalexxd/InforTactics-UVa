@@ -261,18 +261,24 @@ public class pruebas {
 
                                 // Validamos que las coordenadas son validas
                                 if (x >= 0 && x < 6 && y >= 3 && y < 6) { // Columnas 0-5, filas 3-5 para jugador
+                                    // Variable para mostrar mensaje en caso de error
                                     boolean found = false;
+                                    // Rcorremos el deck del jugador en busca de la posicion insertada
                                     for (int i = 0; i < playerDeck.length; i++) {
                                         if (playerDeck[i] != null && playerDeck[i].length() == 3
                                                 && Character.getNumericValue(playerDeck[i].charAt(1)) == x
                                                 && Character.getNumericValue(playerDeck[i].charAt(2)) == y) {
+                                            // Borramos la jugada
                                             playerDeck[i] = "";
+                                            // Cambiamos la variable para que no haya mensaje de error
                                             found = true;
                                         }
                                     }
+                                    // Mostramos mensaje de error
                                     if (!found) {
                                         errorMessage = "Posición no ocupada.";
                                     }
+
                                 } else {
                                     errorMessage = "Posición inválida (columnas 0-5, filas 3-5).";
                                 }
@@ -281,39 +287,57 @@ public class pruebas {
                             } else {
                                 errorMessage = "Formato inválido.";
                             }
-                            break;
+                            break; // Fin caso X
                         case "0":
                             finished = true;
-                            break;
+                            break; // Fin caso 0
+
+                        // Comandos no expectados
                         default:
                             errorMessage = "Comando no válido.";
-                            break;
+                            break; // Fin casos excepcionales
                     }
                     break;// Fin casos especiales
-// Fin casos especiales
+
+                // Fin casos especiales
                 // Jugada normal -> longitud 3
                 case 3:
+                    // Recogemos los datos de la jugada a insertar
+                    // Simbolo del personaje
                     char symbol = input.charAt(0);
-                    int x = Character.getNumericValue(input.charAt(1)); // x = columna
-                    int y = Character.getNumericValue(input.charAt(2)); // y = fila
+                    // Columna
+                    int x = Character.getNumericValue(input.charAt(1));
+                    // Fila 
+                    int y = Character.getNumericValue(input.charAt(2));
+
+                    // Comprobamos si la jugada insertada es valida
                     if (isValidSymbol(symbol) && x >= 0 && x < 6 && y >= 3 && y < 6 && currentElixir >= Methods.getCharacterElixir(symbol)) {
+                        // Variable para almacenar si la posicion esta ocupada o no
                         boolean occupied = false;
+
+                        // Recorremos el deck del jugador
+                        // CHECK
                         for (String p : playerDeck) {
+                            // Validamos 
                             if (p != null && p.length() == 3 && Character.getNumericValue(p.charAt(1)) == x && Character.getNumericValue(p.charAt(2)) == y) {
                                 occupied = true;
                                 break;
                             }
                         }
+                        // Si no esta ocupado
                         if (!occupied) {
+                            // CHECK
                             for (int i = 0; i < playerDeck.length; i++) {
                                 if (playerDeck[i] == null || playerDeck[i].isEmpty()) {
                                     playerDeck[i] = "" + symbol + x + y;
                                     break;
                                 }
                             }
+                            // Si esta ocupada, mostramos mensaje de error
                         } else {
                             errorMessage = "Posición ocupada.";
                         }
+                        // La jugada insertada no es valida, mostramos mensaje de error 
                     } else {
                         errorMessage = "Jugada inválida o elixir insuficiente (columnas 0-5, filas 3-5).";
                     }
