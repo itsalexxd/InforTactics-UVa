@@ -16,11 +16,13 @@ public class pruebas {
         // Limpiar pantalla inicial
         Methods.flushScreen();
 
+        // Variable para la gestion del menu
         String option = printMenu(in);
 
         while (true) {
             switch (option) {
-                case "1" -> { // Nueva Partida
+                // Nueva Partida
+                case "1" -> {
                     if (hasCharacters(playerDeck)) {
                         String[] enemyDeck = loadRandomEnemyDeck();
                         if (enemyDeck != null) {
@@ -215,7 +217,7 @@ public class pruebas {
     }
 
     /**
-     * Configura la baraja del jugador con validaciones (x= columna, y= fila).
+     * Configura la baraja del jugador con validaciones (x = columna, y = fila).
      *
      * @param in Scanner.
      * @param playerDeck Baraja del jugador.
@@ -223,73 +225,104 @@ public class pruebas {
     public static void configureDeck(Scanner in, String[] playerDeck) {
         boolean finished = false;
         while (!finished) {
+            // 1. Limpiamos la terminal
             Methods.flushScreen();
+
+            // 2. Mostramos la informacon del tablero en pantalla
             printBoard(playerDeck);
             printCharactersInfo();
             int currentElixir = calculateCurrentElixir(playerDeck);
             printElixir(currentElixir);
+
+            // Pedimos la jugada a realizar
             System.out.println("[X] para borrar [0] para guardar y salir");
             System.out.print("Inserte una jugada [SXY]: ");
             String input = in.nextLine().toUpperCase().trim();
-            String errorMessage = ""; // Variable para almacenar mensaje de error
-            if (input.length() == 1) {
-                if (input.equals("X")) {
-                    System.out.print("Inserte posición a borrar [XY]: ");
-                    String pos = in.nextLine().toUpperCase().trim();
-                    if (pos.length() == 2) {
-                        int x = Character.getNumericValue(pos.charAt(0)); // x = columna
-                        int y = Character.getNumericValue(pos.charAt(1)); // y = fila
-                        if (x >= 0 && x < 6 && y >= 3 && y < 6) { // Columnas 0-5, filas 3-5 para jugador
-                            boolean found = false;
-                            for (int i = 0; i < playerDeck.length; i++) {
-                                if (playerDeck[i] != null && playerDeck[i].length() == 3
-                                        && Character.getNumericValue(playerDeck[i].charAt(1)) == x
-                                        && Character.getNumericValue(playerDeck[i].charAt(2)) == y) {
-                                    playerDeck[i] = "";
-                                    found = true;
+
+            // Validamos la entrada recibida
+            // Variable para almacenar mensaje de error
+            String errorMessage = "";
+            switch (input.length()) {
+                // Comandos especiales -> longitud 1
+                case 1:
+                    // Comprobamos que caso de comando especial es
+                    switch (input) {
+                        // Borramos jugada
+                        case "X":
+                            // Pedimos que indique la posicion a jugar
+                            System.out.print("Inserte posición a borrar [XY]: ");
+                            String pos = in.nextLine().toUpperCase().trim();
+
+                            // Validamos que la jugada sea valida
+                            if (pos.length() == 2) {
+                                // Recogemos las coords de la posicion a borrar
+                                int x = Character.getNumericValue(pos.charAt(0)); // x = columna
+                                int y = Character.getNumericValue(pos.charAt(1)); // y = fila
+
+                                // Validamos que las coordenadas son validas
+                                if (x >= 0 && x < 6 && y >= 3 && y < 6) { // Columnas 0-5, filas 3-5 para jugador
+                                    boolean found = false;
+                                    for (int i = 0; i < playerDeck.length; i++) {
+                                        if (playerDeck[i] != null && playerDeck[i].length() == 3
+                                                && Character.getNumericValue(playerDeck[i].charAt(1)) == x
+                                                && Character.getNumericValue(playerDeck[i].charAt(2)) == y) {
+                                            playerDeck[i] = "";
+                                            found = true;
+                                        }
+                                    }
+                                    if (!found) {
+                                        errorMessage = "Posición no ocupada.";
+                                    }
+                                } else {
+                                    errorMessage = "Posición inválida (columnas 0-5, filas 3-5).";
                                 }
+
+                                // Si no es de longitud 2, mostramo mensaje de error
+                            } else {
+                                errorMessage = "Formato inválido.";
                             }
-                            if (!found) {
-                                errorMessage = "Posición no ocupada.";
-                            }
-                        } else {
-                            errorMessage = "Posición inválida (columnas 0-5, filas 3-5).";
-                        }
-                    } else {
-                        errorMessage = "Formato inválido.";
-                    }
-                } else if (input.equals("0")) {
-                    finished = true;
-                } else {
-                    errorMessage = "Comando no válido.";
-                }
-            } else if (input.length() == 3) {
-                char symbol = input.charAt(0);
-                int x = Character.getNumericValue(input.charAt(1)); // x = columna
-                int y = Character.getNumericValue(input.charAt(2)); // y = fila
-                if (isValidSymbol(symbol) && x >= 0 && x < 6 && y >= 3 && y < 6 && currentElixir >= Methods.getCharacterElixir(symbol)) {
-                    boolean occupied = false;
-                    for (String p : playerDeck) {
-                        if (p != null && p.length() == 3 && Character.getNumericValue(p.charAt(1)) == x && Character.getNumericValue(p.charAt(2)) == y) {
-                            occupied = true;
                             break;
-                        }
+                        case "0":
+                            finished = true;
+                            break;
+                        default:
+                            errorMessage = "Comando no válido.";
+                            break;
                     }
-                    if (!occupied) {
-                        for (int i = 0; i < playerDeck.length; i++) {
-                            if (playerDeck[i] == null || playerDeck[i].isEmpty()) {
-                                playerDeck[i] = "" + symbol + x + y;
+                    break;// Fin casos especiales
+// Fin casos especiales
+                // Jugada normal -> longitud 3
+                case 3:
+                    char symbol = input.charAt(0);
+                    int x = Character.getNumericValue(input.charAt(1)); // x = columna
+                    int y = Character.getNumericValue(input.charAt(2)); // y = fila
+                    if (isValidSymbol(symbol) && x >= 0 && x < 6 && y >= 3 && y < 6 && currentElixir >= Methods.getCharacterElixir(symbol)) {
+                        boolean occupied = false;
+                        for (String p : playerDeck) {
+                            if (p != null && p.length() == 3 && Character.getNumericValue(p.charAt(1)) == x && Character.getNumericValue(p.charAt(2)) == y) {
+                                occupied = true;
                                 break;
                             }
                         }
+                        if (!occupied) {
+                            for (int i = 0; i < playerDeck.length; i++) {
+                                if (playerDeck[i] == null || playerDeck[i].isEmpty()) {
+                                    playerDeck[i] = "" + symbol + x + y;
+                                    break;
+                                }
+                            }
+                        } else {
+                            errorMessage = "Posición ocupada.";
+                        }
                     } else {
-                        errorMessage = "Posición ocupada.";
+                        errorMessage = "Jugada inválida o elixir insuficiente (columnas 0-5, filas 3-5).";
                     }
-                } else {
-                    errorMessage = "Jugada inválida o elixir insuficiente (columnas 0-5, filas 3-5).";
-                }
-            } else {
-                errorMessage = "Formato inválido.";
+                    break;// Fin casos normales
+
+                // Error -> Cualquier otra longitud
+                default:
+                    errorMessage = "Formato inválido.";
+                    break;// Fin switch por longitud
             }
             // Mostrar mensaje de error después de limpiar y antes de imprimir tablero
             if (!errorMessage.isEmpty()) {
