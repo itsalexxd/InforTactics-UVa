@@ -36,6 +36,8 @@ public class pruebas {
                             System.out.println("Error al cargar baraja enemiga. Verifica que Barajas/BarajasEnemigas.txt exista y tenga contenido.");
                         }
                     } else {
+                        // Limpiamos la panatalla y mostramos el menu de nuevo con el mensaje de error
+                        Methods.flushScreen();
                         System.out.println("¡Tienes que configurar tu baraja antes!");
                     }
                     option = printMenu(in);
@@ -46,6 +48,9 @@ public class pruebas {
                     option = printMenu(in);
                 }
                 case "3" -> { // Guardar Baraja
+                    // Limpiamos la terminal
+                    Methods.flushScreen();
+
                     if (saveDeck(playerDeck)) {
                         System.out.println("Baraja guardada correctamente.");
                     } else {
@@ -54,6 +59,9 @@ public class pruebas {
                     option = printMenu(in);
                 }
                 case "4" -> { // Cargar Baraja
+                    // Limpiamos la terminal
+                    Methods.flushScreen();
+
                     if (loadDeck(playerDeck)) {
                         elixir = calculateCurrentElixir(playerDeck);
                         System.out.println("Baraja cargada correctamente.");
@@ -63,11 +71,17 @@ public class pruebas {
                     option = printMenu(in);
                 }
                 case "5" -> { // Salir
+                    // Limpiamos la terminal
+                    Methods.flushScreen();
+
                     System.out.println("¡Hasta luego!");
                     in.close();
                     System.exit(0);
                 }
                 default -> {
+                    // Limpiamos la terminal
+                    Methods.flushScreen();
+
                     System.out.println("Opción no válida.");
                     option = printMenu(in);
                 }
@@ -129,7 +143,7 @@ public class pruebas {
      * @param elixir Cantidad de elixir.
      */
     public static void printElixir(int elixir) {
-        System.out.println("Elixir Restante: " + elixir);
+        System.out.println("Elixir Restante 🩸: " + elixir);
         System.out.println("-----------------------------------------------------");
     }
 
@@ -289,6 +303,9 @@ public class pruebas {
                             }
                             break; // Fin caso X
                         case "0":
+                            // Limpiamos la terminal
+                            Methods.flushScreen();
+
                             finished = true;
                             break; // Fin caso 0
 
