@@ -332,24 +332,55 @@ public class pruebas {
                         // Variable para almacenar si la posicion esta ocupada o no
                         boolean occupied = false;
 
-                        // Recorremos el deck del jugador
-                        // CHECK
-                        for (String p : playerDeck) {
-                            // Validamos 
+                        // Recorremos el deck del jugador en busca de un personaje en la posicion indicada
+                        int pos = 0;
+                        while (pos < playerDeck.length && !occupied) {
+                            String p = playerDeck[pos];
+                            // Validamos
                             if (p != null && p.length() == 3 && Character.getNumericValue(p.charAt(1)) == x && Character.getNumericValue(p.charAt(2)) == y) {
                                 occupied = true;
-                                break;
                             }
+                            pos++;
                         }
+
+                        // for (String p : playerDeck) {
+                        //     // Validamos 
+                        //     if (p != null && p.length() == 3 && Character.getNumericValue(p.charAt(1)) == x && Character.getNumericValue(p.charAt(2)) == y) {
+                        //         occupied = true;
+                        //         break;
+                        //     }
+                        // }
                         // Si no esta ocupado
                         if (!occupied) {
-                            // CHECK
-                            for (int i = 0; i < playerDeck.length; i++) {
+                            // Si no esta ocuopada, insertamos el personaje
+                            int posInsertar = -1;
+                            boolean espacioLibreEncontrado = false;
+
+                            int i = 0;
+                            while (i < playerDeck.length && !espacioLibreEncontrado) {
                                 if (playerDeck[i] == null || playerDeck[i].isEmpty()) {
-                                    playerDeck[i] = "" + symbol + x + y;
-                                    break;
+                                    posInsertar = i;
+                                    espacioLibreEncontrado = true; // Se encontro la posicion libre, salimos del bucle
                                 }
+                                // Pasamos a la siguiente posicion
+                                i++;
                             }
+
+                            if (posInsertar != -1) {
+                                String personajeInsertar = String.valueOf(symbol) + x + y;
+                                playerDeck[posInsertar] = personajeInsertar;
+                                System.out.println(Methods.getCharacterName(symbol) + " insertado en [" + x + "][" + y + "].");
+                            } else {
+                                System.out.println("ERROR: No hay espacio en la baraja para insertar el personaje.");
+                            }
+
+                            // CHECK
+                            // for (int i = 0; i < playerDeck.length; i++) {
+                            //     if (playerDeck[i] == null || playerDeck[i].isEmpty()) {
+                            //         playerDeck[i] = "" + symbol + x + y;
+                            //         break;
+                            //     }
+                            // }
                             // Si esta ocupada, mostramos mensaje de error
                         } else {
                             errorMessage = "Posición ocupada.";
