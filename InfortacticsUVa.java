@@ -16,61 +16,120 @@ public class InfortacticsUVa {
         // Limpiar pantalla inicial
         Methods.flushScreen();
 
+        // Mostrar menú inicial y leer opcion insertada
         String option = printMenu(in);
 
-        while (true) {
+        // Bucle principal del menu
+        boolean exit = false;
+        while (!exit) {
+            // En funcion de la opción seleccionada realizar acción
             switch (option) {
-                case "1" -> { // Nueva Partida
+                case "1":       // --- Nueva Partida --- //
+                    // 1. Comprobar que la baraja del jugador tiene al menos un personaje
                     if (hasCharacters(playerDeck)) {
+                        // Cargar baraja enemiga aleatoria
                         String[] enemyDeck = loadRandomEnemyDeck();
+                        // Si se ha cargado correctamente, iniciar partida
                         if (enemyDeck != null) {
+                            // 1. Limpiamos la pantalla
+                            Methods.flushScreen();
+                            // 2. Mostramos la baraja enemiga y el tablero
                             System.out.println("Baraja enemiga cargada:");
-                            printEnemyDeckDetails(enemyDeck); // Agregar esta línea
+                            printEnemyDeckDetails(enemyDeck);
                             printBoard(enemyDeck);
+                            // 3. Esperamos a que el usuario presione Enter para comenzar
                             System.out.println("\nPresiona Enter para comenzar...");
                             in.nextLine();
+                            // 4. Iniciamos la partida
                             Methods.startGame(in, playerDeck, enemyDeck);
-                        } else {
+
+                        } else {// En caso de que no se haya cargado correctamente notificamos
+                            // 1. Limpiamos la pantalla
+                            Methods.flushScreen();
+                            // 2. Mostramos mensaje de error
                             System.out.println("Error al cargar baraja enemiga. Verifica que Barajas/BarajasEnemigas.txt exista y tenga contenido.");
                         }
+                        // 2. En caso contrario, informar al usuario
                     } else {
-                        System.out.println("¡Tienes que configurar tu baraja antes!");
+                        // 1. Limpiamos la pantalla
+                        Methods.flushScreen();
+                        // 2. Mostramos mensaje de error
+                        System.out.println("¡Configura tu baraja antes!");
                     }
+                    // Volvemos a mostrar el menu y pedimos opcion
                     option = printMenu(in);
-                }
-                case "2" -> { // Configurar Baraja
+                    break;
+
+                case "2":       // --- Configurar Baraja --- //
+                    // 1. Configuramos la baraja del jugador
                     configureDeck(in, playerDeck);
-                    elixir = calculateCurrentElixir(playerDeck); // Recalcular elixir después de configurar
+                    // 2. Recalculamos el elixir actual
+                    elixir = calculateCurrentElixir(playerDeck);
+                    // 3. Volvemos a mostrar el menu y pedimos opcion
                     option = printMenu(in);
-                }
-                case "3" -> { // Guardar Baraja
+                    break;
+
+                case "3":       // --- Guardar Baraja --- //
+                    // 1. Guardamos la baraja del jugador 
                     if (saveDeck(playerDeck)) {
+                        // 2. Informamos al usuario
                         System.out.println("Baraja guardada correctamente.");
+
+                        // En caso de que no se haya guardado correctamente notificamos
                     } else {
+                        // 1. Limpiamos la pantalla
+                        Methods.flushScreen();
+                        // 2. Mostramos mensaje de error
                         System.out.println("Error al guardar la baraja.");
                     }
+                    // 3. Volvemos a mostrar el menu y pedimos opcion
                     option = printMenu(in);
-                }
-                case "4" -> { // Cargar Baraja
+                    break;
+
+                case "4":       // --- Cargar Baraja --- //
+                    // 1. Comprobamos que la bara ya se ha cargado correctamente
                     if (loadDeck(playerDeck)) {
+                        // 2. Recalculamos el elixir actual
                         elixir = calculateCurrentElixir(playerDeck);
+                        // 3. Informamos al usuario
                         System.out.println("Baraja cargada correctamente.");
+
+                        // En caso de que no se haya cargado correctamente notificamos
                     } else {
+                        // 1. Limpiamos la pantalla
+                        Methods.flushScreen();
+
+                        // 2. Mostramos mensaje de error
                         System.out.println("Error al cargar la baraja.");
                     }
+
+                    // 4. Volvemos a mostrar el menu y pedimos opcion
                     option = printMenu(in);
-                }
-                case "5" -> { // Salir
+                    break;
+
+                case "5":       // --- Salir --- //
+
+                    // 1. Limpiamos la pantalla
+                    Methods.flushScreen();
+                    // 2. Despedida
                     System.out.println("¡Hasta luego!");
-                    in.close();
-                    System.exit(0);
-                }
-                default -> {
+                    exit = true;
+                    break;
+
+                default:        // --- Opción no válida o no contemplada --- //
+                    // 1. Limpiamos la pantalla
+                    Methods.flushScreen();
+
+                    // 2. Informamos al usuario
                     System.out.println("Opción no válida.");
+
+                    // 3. Volvemos a mostrar el menu y pedimos opcion
                     option = printMenu(in);
-                }
-            }
-        }
+                    break;
+            }// Fin switch
+        }// Fin while
+        // Cerramos el scanner
+        in.close();
     }
 
     /**
