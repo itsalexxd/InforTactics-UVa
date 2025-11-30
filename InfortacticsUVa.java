@@ -197,62 +197,96 @@ public class InfortacticsUVa {
      * @param deck Vector de personajes.
      */
     public static void printBoard(String[] deck) {
+        // Inicializar tablero vacío
         String[][] board = new String[Assets.BOARD_ROWS][Assets.BOARD_COLUMNS];
+
+        // Rellenar tablero con posiciones vacías
         for (int i = 0; i < Assets.BOARD_ROWS; i++) {
             for (int j = 0; j < Assets.BOARD_COLUMNS; j++) {
                 board[i][j] = (i < 3) ? String.valueOf(Assets.NO_POSITION) : " ";
             }
-        }
+        }// Fin for rellenar espacios vacios
+
+        // Colocar personajes en el tablero según la baraja
         for (String character : deck) {
+            // Cada personaje es una cadena de 3 caracteres: [Símbolo][X][Y]
             if (character != null && character.length() == 3) {
+                // Obtener símbolo y coordenadas
                 char symbol = character.charAt(0);
                 int x = Character.getNumericValue(character.charAt(1)); // x = columna
                 int y = Character.getNumericValue(character.charAt(2)); // y = fila
+                // Colocar el personaje en el tablero si las coordenadas son válidas
                 if (x >= 0 && x < Assets.BOARD_COLUMNS && y >= 0 && y < Assets.BOARD_ROWS) {
                     board[y][x] = Methods.getCharacterImage(symbol); // Colocar en [fila][columna]
                 }
             }
-        }
+        }// Fin for colocar personajes
+
+        // Imprimir el tablero con bordes y alineación
         System.out.println("TABLERO");
         System.out.print("   ");
+
+        // Imprimir números de columna
         for (int j = 0; j < Assets.BOARD_COLUMNS; j++) {
             System.out.print("  " + j + " ");
         }
+
         System.out.println();
+
+        // Imprimir borde superior
         System.out.print("   ┌");
+        // Imprimir separadores de columna
         for (int j = 0; j < Assets.BOARD_COLUMNS; j++) {
             System.out.print("────");
+            // Imprimir cruces entre columnas
             if (j < Assets.BOARD_COLUMNS - 1) {
                 System.out.print("┬");
             }
         }
+        // Cerrar borde superior
         System.out.println("┐");
+
+        // Imprimir filas del tablero
         for (int i = 0; i < Assets.BOARD_ROWS; i++) {
+            // Imprimir número de fila
             System.out.print(" " + i + " │");
+            // Imprimir celdas de la fila
             for (int j = 0; j < Assets.BOARD_COLUMNS; j++) {
                 System.out.print(String.format(" %-2s │", board[i][j]));
             }
+
             System.out.println();
+            // Imprimir separador entre filas
             if (i < Assets.BOARD_ROWS - 1) {
+                // Imprimir borde intermedio
                 System.out.print("   ├");
+                // Imprimir separadores de columna
                 for (int j = 0; j < Assets.BOARD_COLUMNS; j++) {
                     System.out.print("────");
+                    // Imprimir cruces entre columnas
                     if (j < Assets.BOARD_COLUMNS - 1) {
                         System.out.print("┼");
                     }
                 }
+                // Cerrar borde intermedio
                 System.out.println("┤");
             }
         }
+
+        // Imprimir borde inferior
         System.out.print("   └");
+        // Imprimir separadores de columna
         for (int j = 0; j < Assets.BOARD_COLUMNS; j++) {
             System.out.print("────");
+            // Imprimir cruces entre columnas
             if (j < Assets.BOARD_COLUMNS - 1) {
                 System.out.print("┴");
             }
         }
+        // Cerrar borde inferior
         System.out.println("┘");
-    }
+
+    }// Fin printBoard
 
     /**
      * Imprime los detalles de la baraja enemiga: emoji, nombre y posición.
@@ -260,12 +294,17 @@ public class InfortacticsUVa {
      * @param enemyDeck Baraja enemiga.
      */
     public static void printEnemyDeckDetails(String[] enemyDeck) {
+        // Imprimir detalles de la baraja enemiga
         System.out.println("Cartas enemigas:");
+        // Cada personaje es una cadena de 3 caracteres: [Símbolo][X][Y]
         for (String character : enemyDeck) {
+            // Verificar que el personaje no sea nulo y tenga la longitud correcta
             if (character != null && character.length() == 3) {
+                // Obtener símbolo y coordenadas
                 char symbol = character.charAt(0);
                 int x = Character.getNumericValue(character.charAt(1)); // X = columna
                 int y = Character.getNumericValue(character.charAt(2)); // Y = fila
+                // Imprimir detalles del personaje
                 String name = Methods.getCharacterName(symbol);
                 String image = Methods.getCharacterImage(symbol);
                 System.out.println(image + " " + name + " en [" + x + "][" + y + "]");
@@ -280,85 +319,159 @@ public class InfortacticsUVa {
      * @param playerDeck Baraja del jugador.
      */
     public static void configureDeck(Scanner in, String[] playerDeck) {
+        int currentElixir;
+        // Bucle hasta que el usuario decida salir
         boolean finished = false;
         while (!finished) {
+            // 1. Limpiamos la pantalla
             Methods.flushScreen();
-            printBoard(playerDeck);
-            printCharactersInfo();
-            int currentElixir = calculateCurrentElixir(playerDeck);
-            printElixir(currentElixir);
+            // 2. Mostramos el tablero, info personajes y elixir restante
+            printBoard(playerDeck); // Tablero del jugador
+            printCharactersInfo();  // Info personajes
+            currentElixir = calculateCurrentElixir(playerDeck); // Calculamos el elixir restante
+            printElixir(currentElixir); // Elixir restante
+            // 3. Pedimos jugada al usuario
             System.out.println("[X] para borrar [0] para guardar y salir");
             System.out.print("Inserte una jugada [SXY]: ");
+            // Leer entrada del usuario
             String input = in.nextLine().toUpperCase().trim();
             String errorMessage = ""; // Variable para almacenar mensaje de error
-            if (input.length() == 1) {
-                if (input.equals("X")) {
-                    System.out.print("Inserte posición a borrar [XY]: ");
-                    String pos = in.nextLine().toUpperCase().trim();
-                    if (pos.length() == 2) {
-                        int x = Character.getNumericValue(pos.charAt(0)); // x = columna
-                        int y = Character.getNumericValue(pos.charAt(1)); // y = fila
-                        if (x >= 0 && x < 6 && y >= 3 && y < 6) { // Columnas 0-5, filas 3-5 para jugador
-                            boolean found = false;
-                            for (int i = 0; i < playerDeck.length; i++) {
-                                if (playerDeck[i] != null && playerDeck[i].length() == 3
-                                        && Character.getNumericValue(playerDeck[i].charAt(1)) == x
-                                        && Character.getNumericValue(playerDeck[i].charAt(2)) == y) {
-                                    playerDeck[i] = "";
-                                    found = true;
+            // Procesar entrada del usuario
+            switch (input.length()) {
+                case 1:     // --- Comandos Especiales --- //
+                    switch (input) {    // Switch comandos especiales
+                        case "X":       // --- Borrar Personaje --- //
+                            // Pedimos posición a borrar
+                            System.out.print("Inserte posición a borrar [XY]: ");
+                            String pos = in.nextLine().toUpperCase().trim();
+                            // Validamos posición
+                            if (pos.length() == 2) {    // Formato correcto
+                                // Obtener coordenadas
+                                int x = Character.getNumericValue(pos.charAt(0)); // x = columna
+                                int y = Character.getNumericValue(pos.charAt(1)); // y = fila
+
+                                // Validar rango -- Columnas 0-5, filas 3-5 para jugador
+                                if (x >= 0 && x < 6 && y >= 3 && y < 6) {
+                                    // Buscar y borrar personaje en la posición indicada
+                                    boolean found = false;
+                                    for (int i = 0; i < playerDeck.length; i++) {
+                                        // Si la posicion playerDeck[i] no esta vacia - Coincide con las coordenadas - Tiene longitud 3
+                                        // Borramos (cambiamos caracter por cadena vacia)
+                                        if (playerDeck[i] != null && playerDeck[i].length() == 3
+                                                && Character.getNumericValue(playerDeck[i].charAt(1)) == x
+                                                && Character.getNumericValue(playerDeck[i].charAt(2)) == y) {
+                                            playerDeck[i] = "";
+                                            // Marcamos como encontrado
+                                            found = true;
+                                        }
+                                    } // Fin for buscar personaje
+
+                                    // Si no se ha encontrado personaje en la posición indicada
+                                    if (!found) {
+                                        // Mostramos mensaje de error
+                                        errorMessage = "Posición no ocupada.";
+                                    }
+
+                                } else {
+                                    // Posición fuera de rango
+                                    errorMessage = "Posición inválida (columnas 0-5, filas 3-5).";
                                 }
+                            } else {
+                                // Formato inválido
+                                errorMessage = "Formato inválido.";
                             }
-                            if (!found) {
-                                errorMessage = "Posición no ocupada.";
-                            }
-                        } else {
-                            errorMessage = "Posición inválida (columnas 0-5, filas 3-5).";
-                        }
-                    } else {
-                        errorMessage = "Formato inválido.";
-                    }
-                } else if (input.equals("0")) {
-                    finished = true;
-                } else {
-                    errorMessage = "Comando no válido.";
-                }
-            } else if (input.length() == 3) {
-                char symbol = input.charAt(0);
-                int x = Character.getNumericValue(input.charAt(1)); // x = columna
-                int y = Character.getNumericValue(input.charAt(2)); // y = fila
-                if (isValidSymbol(symbol) && x >= 0 && x < 6 && y >= 3 && y < 6 && currentElixir >= Methods.getCharacterElixir(symbol)) {
-                    boolean occupied = false;
-                    for (String p : playerDeck) {
-                        if (p != null && p.length() == 3 && Character.getNumericValue(p.charAt(1)) == x && Character.getNumericValue(p.charAt(2)) == y) {
-                            occupied = true;
+                            break; // Fin borrar personaje
+                        case "0":       // --- Guardar y Salir --- //
+                            // Marcamos como finalizado
+                            finished = true;
                             break;
-                        }
-                    }
-                    if (!occupied) {
-                        for (int i = 0; i < playerDeck.length; i++) {
-                            if (playerDeck[i] == null || playerDeck[i].isEmpty()) {
-                                playerDeck[i] = "" + symbol + x + y;
-                                break;
+                        default:        // --- Comando no válido --- //
+                            // 1. Limpiamos la pantalla
+                            Methods.flushScreen();
+                            // 2. Mostramos mensaje de error
+                            errorMessage = "Comando no válido.";
+                            break;
+                    }// Fin switch comandos especiales
+                    break;
+
+                case 3:     // --- Colocar Personaje --- //
+                    // Obtener símbolo y coordenadas 
+                    char symbol = input.charAt(0);
+                    int x = Character.getNumericValue(input.charAt(1)); // x = columna
+                    int y = Character.getNumericValue(input.charAt(2)); // y = fila
+
+                    // Validar símbolo, rango y elixir suficiente
+                    if (isValidSymbol(symbol) && x >= 0 && x < 6 && y >= 3 && y < 6 && currentElixir >= Methods.getCharacterElixir(symbol)) {
+                        // Verificar si la posición ya está ocupada
+                        boolean occupied = false;
+
+                        // Recorrer la baraja para verificar si algun personaje ocupa la posición (x,y)
+                        int pos = 0;
+                        // Bucle hasta encontrar posición ocupada o recorrer toda la baraja
+                        while (pos < playerDeck.length && !occupied) {
+                            // Obtener personaje en la posición actual
+                            String p = playerDeck[pos];
+                            // Verificar si el personaje coincide con la posición (x,y)
+                            if (p != null && p.length() == 3 && Character.getNumericValue(p.charAt(1)) == x && Character.getNumericValue(p.charAt(2)) == y) {
+                                // Posición ocupada, actualizamos variable
+                                occupied = true;
                             }
+                            // Incrementar posición para siguiente iteración
+                            pos++;
+                        } // Fin while verificar posición ocupada
+
+                        // Si no está ocupada, colocar el personaje
+                        if (!occupied) {
+                            int posInsertar = -1;
+                            boolean espacioLibreEncontrado = false;
+
+                            int i = 0;
+                            while (i < playerDeck.length && !espacioLibreEncontrado) {
+                                // Si la posición está libre, la guardamos para insertar
+                                if (playerDeck[i] == null || playerDeck[i].isEmpty()) {
+                                    posInsertar = i;
+                                    espacioLibreEncontrado = true;
+                                }
+                                // Pasamos a la siguiente posicion
+                                i++;
+                            }
+
+                            if (posInsertar != -1) {
+                                String personajeInsertar = String.valueOf(symbol) + x + y;
+                                playerDeck[posInsertar] = personajeInsertar;
+                                System.out.println("Personaje " + Methods.getCharacterName(symbol) + " colocado en [" + x + "][" + y + "].");
+
+                            } else {
+                                System.out.println("No es posible insertar el personaje en la baraja.");
+                            }
+
+                            // Si está ocupada, mostrar mensaje de error
+                        } else {
+                            // Posición ocupada
+                            errorMessage = "Posición ocupada.";
                         }
                     } else {
-                        errorMessage = "Posición ocupada.";
+                        // Símbolo inválido, posición fuera de rango o elixir insuficiente
+                        errorMessage = "Jugada inválida o elixir insuficiente (columnas 0-5, filas 3-5).";
                     }
-                } else {
-                    errorMessage = "Jugada inválida o elixir insuficiente (columnas 0-5, filas 3-5).";
-                }
-            } else {
-                errorMessage = "Formato inválido.";
-            }
+                    break;
+                default:    // --- Formato inválido --- //
+                    errorMessage = "Formato inválido.";
+                    break;
+            } // Fin switch longitud input
+
             // Mostrar mensaje de error después de limpiar y antes de imprimir tablero
             if (!errorMessage.isEmpty()) {
+                // 1. Limpiamos la pantalla
                 Methods.flushScreen();
+                // 2. Mostramos el mensaje de error
                 System.out.println(errorMessage);
+                // 3. Esperamos a que el usuario presione Enter para continuar 
                 System.out.println("Presiona Enter para continuar...");
                 in.nextLine();
-            }
-        }
-    }
+            } // Fin mostrar mensaje de error
+        } // Fin while configurar baraja
+    } // Fin configureDeck
 
     /**
      * Calcula el elixir actual basado en personajes colocados.
