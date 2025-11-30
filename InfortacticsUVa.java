@@ -6,8 +6,11 @@ import java.util.Scanner;
 public class InfortacticsUVa {
 
     public static void main(String[] args) {
+        // Creamos el objeto in de tipo Scanner para entrada de usuario por teclado en la consola
         Scanner in = new Scanner(System.in);
-        String[] playerDeck = new String[Assets.INITIAL_ELIXIR]; // Baraja del jugador (máx 8 personajes)
+        // Baraja del jugador
+        String[] playerDeck = new String[Assets.INITIAL_ELIXIR];
+        // Elixir inicial del jugador
         int elixir = Assets.INITIAL_ELIXIR;
 
         // Inicializar baraja del jugador vacía
@@ -66,12 +69,18 @@ public class InfortacticsUVa {
                     // 2. Recalculamos el elixir actual
                     elixir = calculateCurrentElixir(playerDeck);
                     // 3. Volvemos a mostrar el menu y pedimos opcion
+                    // Limpiamos la pantalla
+                    Methods.flushScreen();
+                    // Volvemos a mostrar el menu y pedimos opcion
                     option = printMenu(in);
                     break;
 
                 case "3":       // --- Guardar Baraja --- //
                     // 1. Guardamos la baraja del jugador 
                     if (saveDeck(playerDeck)) {
+                        // Limpiamos la pantalla
+                        Methods.flushScreen();
+
                         // 2. Informamos al usuario
                         System.out.println("Baraja guardada correctamente.");
 
@@ -82,6 +91,8 @@ public class InfortacticsUVa {
                         // 2. Mostramos mensaje de error
                         System.out.println("Error al guardar la baraja.");
                     }
+                    // Limpiamos la pantalla
+                    Methods.flushScreen();
                     // 3. Volvemos a mostrar el menu y pedimos opcion
                     option = printMenu(in);
                     break;
@@ -91,6 +102,8 @@ public class InfortacticsUVa {
                     if (loadDeck(playerDeck)) {
                         // 2. Recalculamos el elixir actual
                         elixir = calculateCurrentElixir(playerDeck);
+                        // Limpiamos la pantalla
+                        Methods.flushScreen();
                         // 3. Informamos al usuario
                         System.out.println("Baraja cargada correctamente.");
 
@@ -102,7 +115,6 @@ public class InfortacticsUVa {
                         // 2. Mostramos mensaje de error
                         System.out.println("Error al cargar la baraja.");
                     }
-
                     // 4. Volvemos a mostrar el menu y pedimos opcion
                     option = printMenu(in);
                     break;
@@ -203,7 +215,7 @@ public class InfortacticsUVa {
         // Rellenar tablero con posiciones vacías
         for (int i = 0; i < Assets.BOARD_ROWS; i++) {
             for (int j = 0; j < Assets.BOARD_COLUMNS; j++) {
-                board[i][j] = (i < 3) ? String.valueOf(Assets.NO_POSITION) : " ";
+                board[i][j] = (i < 3) ? String.valueOf(Assets.NO_POSITION) : "";
             }
         }// Fin for rellenar espacios vacios
 
@@ -382,6 +394,8 @@ public class InfortacticsUVa {
                             }
                             break; // Fin borrar personaje
                         case "0":       // --- Guardar y Salir --- //
+                            // 1. Limpiamos la pantalla
+                            Methods.flushScreen();
                             // Marcamos como finalizado
                             finished = true;
                             break;
@@ -477,17 +491,22 @@ public class InfortacticsUVa {
      * Calcula el elixir actual basado en personajes colocados.
      *
      * @param playerDeck Baraja del jugador.
-     * @return Elixir restante.
+     * @return elixir Elixir restante.
      */
     public static int calculateCurrentElixir(String[] playerDeck) {
+        // Variable para almacenar el elixir usado
         int used = 0;
+        // Recorrer la baraja y sumar el elixir de cada personaje insertado
         for (String p : playerDeck) {
+            // Si la posición no está vacía, sumar el elixir del personaje
             if (p != null && !p.isEmpty()) {
+                // Sumar el elixir del personaje
                 used += Methods.getCharacterElixir(p.charAt(0));
             }
         }
+        // Devolver elixir restante
         return Assets.INITIAL_ELIXIR - used;
-    }
+    } // Fin calculateCurrentElixir
 
     /**
      * Verifica si la baraja tiene al menos un personaje.
@@ -496,13 +515,17 @@ public class InfortacticsUVa {
      * @return True si tiene personajes.
      */
     public static boolean hasCharacters(String[] deck) {
+        // Recorrer la baraja y verificar si hay al menos un personaje
         for (String p : deck) {
+            // Si la posición no está vacía, hay al menos un personaje
             if (p != null && !p.isEmpty()) {
+                // Devolver true
                 return true;
             }
         }
+        // No se encontraron personajes, devolver false
         return false;
-    }
+    } // Fin hasCharacters
 
     /**
      * Valida si el símbolo es de un personaje válido.
@@ -511,10 +534,11 @@ public class InfortacticsUVa {
      * @return True si válido.
      */
     public static boolean isValidSymbol(char symbol) {
+        // Verificar si el símbolo corresponde a un personaje válido
         return symbol == Assets.ARCHER_SYMBOL || symbol == Assets.DRAGON_SYMBOL
                 || symbol == Assets.PRINCESS_SYMBOL || symbol == Assets.VALKYRIE_SYMBOL
                 || symbol == Assets.GOBLIN_SYMBOL || symbol == Assets.PK_SYMBOL;
-    }
+    } // Fin isValidSymbol
 
     /**
      * Guarda la baraja en Barajas/BarajaGuardada.txt.
@@ -523,23 +547,36 @@ public class InfortacticsUVa {
      * @return True si exitoso.
      */
     public static boolean saveDeck(String[] playerDeck) {
+        // Crear directorio Barajas si no existe
         try {
+            // Establecer ruta del directorio
             Path dir = Paths.get("Barajas");
+            // Crear directorio si no existe
             if (!Files.exists(dir)) {
+                // Creamos el directorio para almacenar las barajas
                 Files.createDirectory(dir);
             }
+
+            // Guardar baraja en archivo
             try (PrintWriter writer = new PrintWriter(new FileWriter("Barajas/BarajaGuardada.txt"))) {
                 for (String p : playerDeck) {
+                    // Escribir solo posiciones no vacías
                     if (p != null && !p.isEmpty()) {
+                        // Escribir personaje en el archivo
                         writer.print(p + " ");
-                    }
-                }
-            }
+                    } // Fin if posición no vacía
+                } // Fin for recorrer baraja
+            } // Fin try guardar baraja
+
+            // Devolver true si exitoso
             return true;
+
+            // Capturar excepciones de I/O
         } catch (IOException e) {
+            // Devolver false si error
             return false;
         }
-    }
+    } // Fin saveDeck
 
     /**
      * Carga la baraja desde Barajas/BarajaGuardada.txt.
@@ -549,19 +586,30 @@ public class InfortacticsUVa {
      */
     public static boolean loadDeck(String[] playerDeck) {
         try {
+            // Inicializar baraja vacía
             Methods.initializeDeck(playerDeck);
+            // Leer contenido del archivo
             String content = new String(Files.readAllBytes(Paths.get("Barajas/BarajaGuardada.txt")));
+            // Dividir contenido en partes y cargar en la baraja
             String[] parts = content.trim().split("\\s+");
+            // Cargar personajes en la baraja
             for (int i = 0; i < parts.length && i < playerDeck.length; i++) {
+                // Validar longitud del personaje
                 if (parts[i].length() == 3) {
+                    // Asignar personaje a la baraja
                     playerDeck[i] = parts[i];
                 }
             }
+
+            // Devolver true si exitoso
             return true;
+
+            // Capturar excepciones de I/O
         } catch (IOException e) {
+            // Devolver false si error
             return false;
-        }
-    }
+        } // Fin try-catch
+    } // Fin loadDeck
 
     /**
      * Carga una baraja enemiga aleatoria desde Barajas/BarajasEnemigas.txt.
@@ -608,4 +656,5 @@ public class InfortacticsUVa {
             return null;
         }
     }
-}
+
+} // Fin clase InfortacticsUVa
