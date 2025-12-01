@@ -165,31 +165,50 @@ public class InfortacticsUVa {
     }
 
     /**
-     * Imprime la información de los personajes en formato tabular (con emojis).
+     * Imprime la información de los personajes en formato tabular (con emojis)
+     * con alineación mejorada.
      */
     public static void printCharactersInfo() {
+        // Personaje (18), Símb. (5), Elixir (6), %Ataque (8), %Defensa (8)
+
         System.out.println("\nPERSONAJES DISPONIBLES:");
-        System.out.printf("%-15s %-6s %-6s %-8s %-8s%n", "Personaje", "Símb.", "Elixir", "%Ataque", "%Defensa");
-        System.out.println("-----------------------------------------------------");
-        System.out.printf("%-15s %-6s %-6d %-8d %-8d%n",
+
+        // Encabezado: Reducimos el ancho del Personaje y el Símbolo para reducir el espacio blanco excesivo
+        System.out.printf("%-18s %-5s %6s %8s %8s%n", "Personaje", "Símb.", "Elixir", "%Ataque", "%Defensa");
+        System.out.println("---------------------------------------------------"); // Longitud ajustada a la nueva suma de anchuras (aprox 48)
+
+        // Datos de la tabla:
+        // 1. Arquera
+        System.out.printf("%-18s %-5s %6d %8d %8d%n",
                 Assets.ARCHER_IMAGE + " " + Assets.ARCHER_NAME,
                 Assets.ARCHER_SYMBOL, Assets.ARCHER_ELIXIR, Assets.ARCHER_ATTACK, Assets.ARCHER_DEFENSE);
-        System.out.printf("%-15s %-6s %-6d %-8d %-8d%n",
+
+        // 2. Dragón
+        System.out.printf("%-18s %-5s %6d %8d %8d%n",
                 Assets.DRAGON_IMAGE + " " + Assets.DRAGON_NAME,
                 Assets.DRAGON_SYMBOL, Assets.DRAGON_ELIXIR, Assets.DRAGON_ATTACK, Assets.DRAGON_DEFENSE);
-        System.out.printf("%-15s %-6s %-6d %-8d %-8d%n",
+
+        // 3. Princesa
+        System.out.printf("%-18s %-5s %6d %8d %8d%n",
                 Assets.PRINCESS_IMAGE + " " + Assets.PRINCESS_NAME,
                 Assets.PRINCESS_SYMBOL, Assets.PRINCESS_ELIXIR, Assets.PRINCESS_ATTACK, Assets.PRINCESS_DEFENSE);
-        System.out.printf("%-15s %-6s %-6d %-8d %-8d%n",
-                Assets.VALKYRIE_IMAGE + " " + Assets.VALKYRIE_NAME,
-                Assets.VALKYRIE_SYMBOL, Assets.VALKYRIE_ELIXIR, Assets.VALKYRIE_ATTACK, Assets.VALKYRIE_DEFENSE);
-        System.out.printf("%-15s %-6s %-6d %-8d %-8d%n",
+
+        // 4. Valquiria
+        System.out.printf("%-18s %-5s %6d %8d %8d%n",
+                Assets.VALKYRIE_IMAGE + "  " + Assets.VALKYRIE_NAME + "  ",
+                " " + Assets.VALKYRIE_SYMBOL, Assets.VALKYRIE_ELIXIR, Assets.VALKYRIE_ATTACK, Assets.VALKYRIE_DEFENSE);
+
+        // 5. Goblin
+        System.out.printf("%-18s %-5s %6d %8d %8d%n",
                 Assets.GOBLIN_IMAGE + " " + Assets.GOBLIN_NAME,
                 Assets.GOBLIN_SYMBOL, Assets.GOBLIN_ELIXIR, Assets.GOBLIN_ATTACK, Assets.GOBLIN_DEFENSE);
-        System.out.printf("%-15s %-6s %-6d %-8d %-8d%n",
+
+        // 6. P.E.K.K.A
+        System.out.printf("%-18s %-5s %6d %8d %8d%n",
                 Assets.PK_IMAGE + " " + Assets.PK_NAME,
                 Assets.PK_SYMBOL, Assets.PK_ELIXIR, Assets.PK_ATTACK, Assets.PK_DEFENSE);
-        System.out.println("-----------------------------------------------------");
+
+        System.out.println("---------------------------------------------------");
     }
 
     /**
@@ -198,13 +217,19 @@ public class InfortacticsUVa {
      * @param elixir Cantidad de elixir.
      */
     public static void printElixir(int elixir) {
-        System.out.println("Elixir Restante: " + elixir);
+        System.out.println("Elixir Restante 🩸: " + elixir);
         System.out.println("-----------------------------------------------------");
     }
 
     /**
      * Procedimiento que muestra el tablero con emojis y alineación ajustada (x=
      * columna, y= fila).
+     *
+     * @param deck Vector de personajes.
+     */
+    /**
+     * Procedimiento que muestra el tablero con emojis y alineación ajustada (x=
+     * columna, y= fila). Cada celda tiene un ancho fijo de 4 caracteres.
      *
      * @param deck Vector de personajes.
      */
@@ -215,7 +240,8 @@ public class InfortacticsUVa {
         // Rellenar tablero con posiciones vacías
         for (int i = 0; i < Assets.BOARD_ROWS; i++) {
             for (int j = 0; j < Assets.BOARD_COLUMNS; j++) {
-                board[i][j] = (i < 3) ? String.valueOf(Assets.NO_POSITION) : "";
+                String noPosition = String.valueOf(Assets.NO_POSITION) + String.valueOf(Assets.NO_POSITION);
+                board[i][j] = (i < 3) ? noPosition : "";
             }
         }// Fin for rellenar espacios vacios
 
@@ -229,7 +255,11 @@ public class InfortacticsUVa {
                 int y = Character.getNumericValue(character.charAt(2)); // y = fila
                 // Colocar el personaje en el tablero si las coordenadas son válidas
                 if (x >= 0 && x < Assets.BOARD_COLUMNS && y >= 0 && y < Assets.BOARD_ROWS) {
-                    board[y][x] = Methods.getCharacterImage(symbol); // Colocar en [fila][columna]
+                    if (symbol == Assets.VALKYRIE_SYMBOL) {
+                        board[y][x] = Methods.getCharacterImage(symbol) + " "; // Añadir espacio extra para Valquiria y mantener alineación;
+                    } else {
+                        board[y][x] = Methods.getCharacterImage(symbol); // Colocar en [fila][columna]
+                    }
                 }
             }
         }// Fin for colocar personajes
@@ -240,7 +270,7 @@ public class InfortacticsUVa {
 
         // Imprimir números de columna
         for (int j = 0; j < Assets.BOARD_COLUMNS; j++) {
-            System.out.print("  " + j + " ");
+            System.out.print("  " + j + "  ");
         }
 
         System.out.println();
@@ -620,7 +650,7 @@ public class InfortacticsUVa {
      */
     public static String[] loadRandomEnemyDeck() {
         try {
-            Path filePath = Paths.get("/Users/aalexgarc_/Documents/GIT/InforTactics-UVa/BarajasEnemigas.txt");
+            Path filePath = Paths.get("Barajas", "BarajasEnemigas.txt");
             if (!Files.exists(filePath)) {
                 System.out.println("Archivo Barajas/BarajasEnemigas.txt no encontrado.");
                 return null;
