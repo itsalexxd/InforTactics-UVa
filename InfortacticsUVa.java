@@ -650,7 +650,7 @@ public class InfortacticsUVa {
      */
     public static String[] loadRandomEnemyDeck() {
         try {
-            Path filePath = Paths.get("Barajas", "BarajasEnemigas.txt");
+            Path filePath = Paths.get("C:\\Users\\alexg\\Documents\\PROYECTOS\\InforTactics-UVa\\Barajas\\BarajasEnemigas.txt");
             if (!Files.exists(filePath)) {
                 System.out.println("Archivo Barajas/BarajasEnemigas.txt no encontrado.");
                 return null;
@@ -668,6 +668,7 @@ public class InfortacticsUVa {
             String[] enemyDeck = new String[Assets.INITIAL_ELIXIR];
             Methods.initializeDeck(enemyDeck);
             String[] parts = line.split("\\s+");
+            System.out.println("-> PARTS" + parts);
             for (int i = 0; i < parts.length && i < enemyDeck.length; i++) {
                 if (parts[i].length() == 3) {
                     char symbol = parts[i].charAt(0);
