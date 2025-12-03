@@ -35,7 +35,7 @@ public class InfortacticsUVa {
                         // Si se ha cargado correctamente, iniciar partida
                         if (enemyDeck != null) {
                             // 1. Limpiamos la pantalla
-                            Methods.flushScreen();
+                            // Methods.flushScreen();
                             // 2. Mostramos la baraja enemiga y el tablero
                             System.out.println("Baraja enemiga cargada:");
                             printEnemyDeckDetails(enemyDeck);
@@ -48,14 +48,14 @@ public class InfortacticsUVa {
 
                         } else {// En caso de que no se haya cargado correctamente notificamos
                             // 1. Limpiamos la pantalla
-                            Methods.flushScreen();
+                            // Methods.flushScreen();
                             // 2. Mostramos mensaje de error
                             System.out.println("Error al cargar baraja enemiga. Verifica que Barajas/BarajasEnemigas.txt exista y tenga contenido.");
                         }
                         // 2. En caso contrario, informar al usuario
                     } else {
                         // 1. Limpiamos la pantalla
-                        Methods.flushScreen();
+                        // Methods.flushScreen();
                         // 2. Mostramos mensaje de error
                         System.out.println("¡Configura tu baraja antes!");
                     }
@@ -665,20 +665,21 @@ public class InfortacticsUVa {
                 System.out.println("Línea seleccionada en Barajas/BarajasEnemigas.txt está vacía.");
                 return null;
             }
+            // Creamos e inicializamos la baraja enemiga
             String[] enemyDeck = new String[Assets.INITIAL_ELIXIR];
             Methods.initializeDeck(enemyDeck);
+
             String[] parts = line.split("\\s+");
-            System.out.println("-> PARTS" + parts);
+            System.out.println("-> LINE: " + line);
+
             for (int i = 0; i < parts.length && i < enemyDeck.length; i++) {
                 if (parts[i].length() == 3) {
                     char symbol = parts[i].charAt(0);
                     int x = Character.getNumericValue(parts[i].charAt(1)); // X = columna
                     int y = Character.getNumericValue(parts[i].charAt(2)); // Y = fila
-                    // Mapear filas del jugador (3-5) a filas enemigas (0-2)
-                    if (y >= 3 && y <= 5) {
-                        y -= 3; // 3->0, 4->1, 5->2
-                    }
-                    enemyDeck[i] = "" + symbol + x + y;
+
+                    // Insertamos el personaje en la baraja
+                    enemyDeck[i] = "" + symbol + y + x;
                 }
             }
             return enemyDeck;
