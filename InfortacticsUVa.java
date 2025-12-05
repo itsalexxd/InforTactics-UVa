@@ -1,4 +1,12 @@
+/*
+    Cambiar la forma de leer el archivo de Path a Scanner
+    Reemplazar for-each a for
+    Quitar todos los trim/toUpperCase/split/getNumerciValue etc
+    Agregar funciones extra (colores y mas)
+    Elixir, variable que no se usa
 
+    Optimizar en la medida de lo posible
+ */
 import java.io.*;
 import java.nio.file.*;
 import java.util.Scanner;
