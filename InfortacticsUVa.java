@@ -6,121 +6,49 @@ import java.util.Scanner;
 public class InfortacticsUVa {
 
     public static void main(String[] args) {
-        // Creamos el objeto in de tipo Scanner para entrada de usuario por teclado en la consola
-        Scanner in = new Scanner(System.in);
+        // Creamos el objeto sc de tipo Scanner para entrada de usuario por teclado en la consola
+        Scanner sc = new Scanner(System.in);
         // Baraja del jugador
         String[] playerDeck = new String[Assets.INITIAL_ELIXIR];
         // Elixir inicial del jugador
         int elixir = Assets.INITIAL_ELIXIR;
-
         // Inicializar baraja del jugador vacía
         Methods.initializeDeck(playerDeck);
-
         // Limpiar pantalla inicial
         Methods.flushScreen();
-
         // Mostrar menú inicial y leer opcion insertada
-        String option = printMenu(in);
-
+        String option = printMenu(sc);
         // Bucle principal del menu
         boolean exit = false;
         while (!exit) {
             // En funcion de la opción seleccionada realizar acción
             switch (option) {
                 case "1":       // --- Nueva Partida --- //
-                    // 1. Comprobar que la baraja del jugador tiene al menos un personaje
-                    if (hasCharacters(playerDeck)) {
-                        // Cargar baraja enemiga aleatoria
-                        String[] enemyDeck = loadRandomEnemyDeck();
-                        // Si se ha cargado correctamente, iniciar partida
-                        if (enemyDeck != null) {
-                            // 1. Limpiamos la pantalla
-                            // Methods.flushScreen();
-                            // 2. Mostramos la baraja enemiga y el tablero
-                            System.out.println("Baraja enemiga cargada:");
-                            printEnemyDeckDetails(enemyDeck);
-                            printBoard(enemyDeck);
-                            // 3. Esperamos a que el usuario presione Enter para comenzar
-                            System.out.println("\nPresiona Enter para comenzar...");
-                            in.nextLine();
-                            // 4. Iniciamos la partida
-                            Methods.startGame(in, playerDeck, enemyDeck);
-
-                        } else {// En caso de que no se haya cargado correctamente notificamos
-                            // 1. Limpiamos la pantalla
-                            // Methods.flushScreen();
-                            // 2. Mostramos mensaje de error
-                            System.out.println("Error al cargar baraja enemiga. Verifica que Barajas/BarajasEnemigas.txt exista y tenga contenido.");
-                        }
-                        // 2. En caso contrario, informar al usuario
-                    } else {
-                        // 1. Limpiamos la pantalla
-                        // Methods.flushScreen();
-                        // 2. Mostramos mensaje de error
-                        System.out.println("¡Configura tu baraja antes!");
-                    }
-                    // Volvemos a mostrar el menu y pedimos opcion
-                    option = printMenu(in);
+                    // Ejecuto la funcion en cuestion
+                    logicaNuevaPartida(sc, option, playerDeck);
+                    // Pedimos la nueva opcion del menu
+                    option = printMenu(sc);
                     break;
 
                 case "2":       // --- Configurar Baraja --- //
-                    // 1. Configuramos la baraja del jugador
-                    configureDeck(in, playerDeck);
-                    // 2. Recalculamos el elixir actual
-                    elixir = calculateCurrentElixir(playerDeck);
-                    // 3. Volvemos a mostrar el menu y pedimos opcion
-                    // Limpiamos la pantalla
-                    Methods.flushScreen();
+                    logicaConfigurarBaraja(sc, playerDeck, elixir);
                     // Volvemos a mostrar el menu y pedimos opcion
-                    option = printMenu(in);
+                    option = printMenu(sc);
                     break;
 
                 case "3":       // --- Guardar Baraja --- //
-                    // 1. Guardamos la baraja del jugador 
-                    if (saveDeck(playerDeck)) {
-                        // Limpiamos la pantalla
-                        Methods.flushScreen();
-
-                        // 2. Informamos al usuario
-                        System.out.println("Baraja guardada correctamente.");
-
-                        // En caso de que no se haya guardado correctamente notificamos
-                    } else {
-                        // 1. Limpiamos la pantalla
-                        Methods.flushScreen();
-                        // 2. Mostramos mensaje de error
-                        System.out.println("Error al guardar la baraja.");
-                    }
-                    // Limpiamos la pantalla
-                    Methods.flushScreen();
+                    logicaGuardarBaraja(playerDeck);
                     // 3. Volvemos a mostrar el menu y pedimos opcion
-                    option = printMenu(in);
+                    option = printMenu(sc);
                     break;
 
                 case "4":       // --- Cargar Baraja --- //
-                    // 1. Comprobamos que la bara ya se ha cargado correctamente
-                    if (loadDeck(playerDeck)) {
-                        // 2. Recalculamos el elixir actual
-                        elixir = calculateCurrentElixir(playerDeck);
-                        // Limpiamos la pantalla
-                        Methods.flushScreen();
-                        // 3. Informamos al usuario
-                        System.out.println("Baraja cargada correctamente.");
-
-                        // En caso de que no se haya cargado correctamente notificamos
-                    } else {
-                        // 1. Limpiamos la pantalla
-                        Methods.flushScreen();
-
-                        // 2. Mostramos mensaje de error
-                        System.out.println("Error al cargar la baraja.");
-                    }
+                    logicaCargarBaraja(playerDeck, elixir);
                     // 4. Volvemos a mostrar el menu y pedimos opcion
-                    option = printMenu(in);
+                    option = printMenu(sc);
                     break;
 
                 case "5":       // --- Salir --- //
-
                     // 1. Limpiamos la pantalla
                     Methods.flushScreen();
                     // 2. Despedida
@@ -131,18 +59,116 @@ public class InfortacticsUVa {
                 default:        // --- Opción no válida o no contemplada --- //
                     // 1. Limpiamos la pantalla
                     Methods.flushScreen();
-
                     // 2. Informamos al usuario
                     System.out.println("Opción no válida.");
-
                     // 3. Volvemos a mostrar el menu y pedimos opcion
-                    option = printMenu(in);
+                    option = printMenu(sc);
                     break;
             }// Fin switch
         }// Fin while
         // Cerramos el scanner
-        in.close();
-    }
+        sc.close();
+    } // Fin main
+
+    // ###### METODOS ###### //
+    /*
+     * Logica principal para iniciar la partida e imprime la partida completa
+     * 
+     * @param in Scanner, option String, playerDeck String[]
+     */
+    public static void logicaNuevaPartida(Scanner in, String option, String[] playerDeck) {
+        // 1. Comprobamos que el jugador ha realizado cambios en su baraja y tiene al menos un personaje
+        if (hasCharacters(playerDeck)) { // Baraja configurada
+            // Cargamos baraja enemiga aleatoria
+            String[] enemyDeck = loadRandomEnemyDeck();
+            // Comprobamos que la baraja enemiga ha sido cargada correctamente
+            if (enemyDeck != null) {
+                // 1. Limpiamos pantalla para mayor claridad
+                Methods.flushScreen();
+                // Mostramos la baraja enemiga y los detalles relacionados
+                System.out.println("Baraja enemiga cargada: ");
+                printEnemyDeckDetails(enemyDeck);
+                printBoard(enemyDeck);
+                // 3. Esperamos a que el usuario presione "Enter" para comenzar la partida
+                System.out.println("Presiona [Enter] para comenzar...");
+                in.nextLine();
+                // 4. Iniciamos la partida
+                Methods.startGame(in, playerDeck, enemyDeck);
+            } else { // En caso de que no se haya cargado la baraja enemiga correctamente: 
+                // 1. Limpiamos la pantalla 
+                Methods.flushScreen();
+                // 2. Mostramos mensaje de error
+                System.out.println("Error al cargar la baraja enemiga.");
+                System.out.println("Verifica que la ruta /Barajas/BarajasEnemigas.txt exista y tenga contenido.");
+            }
+        } else { // Baraja no configurada
+            // 1. Limpiamos la pantalla
+            Methods.flushScreen();
+            // Mostramos mensaje de error
+            System.out.println("¡Configura tu baraja antes!");
+        } // Fin if inicial
+        // Limpiamos la terminal
+        Methods.flushScreen();
+    } // Fin nuevaPartida
+
+    /*
+     * Logica para el caso 2 del switch, configurar la baraja del jugador
+     * 
+     * @param 
+     */
+    public static void logicaConfigurarBaraja(Scanner sc, String[] playerDeck, int elixir) {
+        // 1. Configuramos la baraja del jugador
+        configureDeck(sc, playerDeck);
+        // 2. Recalculamos el elixir actual
+        elixir = calculateCurrentElixir(playerDeck);
+        // 3. Limpiamos la pantalla
+        Methods.flushScreen();
+    } // Fin logicaConfigurarBaraja
+
+    /*
+     * Logica para guardar la baraja dentro de la ruta /Barajas/BarajasGuardadas.txt
+     * 
+     * @param playerDeck String[]
+     */
+    public static void logicaGuardarBaraja(String[] playerDeck) {
+        // 1. Guardamos la baraja del jugador 
+        if (saveDeck(playerDeck)) {
+            // Limpiamos la pantalla
+            Methods.flushScreen();
+            // 2. Informamos al usuario
+            System.out.println("Baraja guardada correctamente.");
+        } else { // En caso de que no se haya guardado correctamente notificamos
+            // 1. Limpiamos la pantalla
+            Methods.flushScreen();
+            // 2. Mostramos mensaje de error
+            System.out.println("Error al guardar la baraja.");
+        }
+        // Limpiamos la pantalla
+        Methods.flushScreen();
+    } // Fin logicaGuardarBaraja
+
+    /*
+     * Logica para cargar la baraja guardada en el archivo /Baraja/BarajasGuardadas.txt
+     * 
+     * @param playerDeck String[], elixir int
+     */
+    public static void logicaCargarBaraja(String[] playerDeck, int elixir) {
+        // 1. Comprobamos que la bara ya se ha cargado correctamente
+        if (loadDeck(playerDeck)) {
+            // 2. Recalculamos el elixir actual
+            elixir = calculateCurrentElixir(playerDeck);
+            // Limpiamos la pantalla
+            Methods.flushScreen();
+            // 3. Informamos al usuario
+            System.out.println("Baraja cargada correctamente.");
+
+        } else { // En caso de que no se haya cargado correctamente notificamos
+            // 1. Limpiamos la pantalla
+            Methods.flushScreen();
+            // 2. Mostramos mensaje de error
+            System.out.println("Error al cargar la baraja.");
+        }
+    } // Fin logicaCargarBaraja
 
     /**
      * Muestra el menú inicial y lee la opción del usuario.
@@ -221,12 +247,6 @@ public class InfortacticsUVa {
         System.out.println("-----------------------------------------------------");
     }
 
-    /**
-     * Procedimiento que muestra el tablero con emojis y alineación ajustada (x=
-     * columna, y= fila).
-     *
-     * @param deck Vector de personajes.
-     */
     /**
      * Procedimiento que muestra el tablero con emojis y alineación ajustada (x=
      * columna, y= fila). Cada celda tiene un ancho fijo de 4 caracteres.
@@ -619,8 +639,10 @@ public class InfortacticsUVa {
             // Inicializar baraja vacía
             Methods.initializeDeck(playerDeck);
             // Leer contenido del archivo
+            // 
             String content = new String(Files.readAllBytes(Paths.get("Barajas/BarajaGuardada.txt")));
             // Dividir contenido en partes y cargar en la baraja
+            //
             String[] parts = content.trim().split("\\s+");
             // Cargar personajes en la baraja
             for (int i = 0; i < parts.length && i < playerDeck.length; i++) {
@@ -650,7 +672,7 @@ public class InfortacticsUVa {
      */
     public static String[] loadRandomEnemyDeck() {
         try {
-            Path filePath = Paths.get("C:\\Users\\alexg\\Documents\\PROYECTOS\\InforTactics-UVa\\Barajas\\BarajasEnemigas.txt");
+            Path filePath = Paths.get("/Users/aalexgarc_/Downloads/InforTactics-UVa-main/Barajas/BarajasEnemigas.txt");
             if (!Files.exists(filePath)) {
                 System.out.println("Archivo Barajas/BarajasEnemigas.txt no encontrado.");
                 return null;
