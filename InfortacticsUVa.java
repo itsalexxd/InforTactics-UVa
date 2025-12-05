@@ -672,7 +672,7 @@ public class InfortacticsUVa {
      */
     public static String[] loadRandomEnemyDeck() {
         try {
-            Path filePath = Paths.get("/Users/aalexgarc_/Downloads/InforTactics-UVa-main/Barajas/BarajasEnemigas.txt");
+            Path filePath = Paths.get("Barajas/BarajasEnemigas.txt");
             if (!Files.exists(filePath)) {
                 System.out.println("Archivo Barajas/BarajasEnemigas.txt no encontrado.");
                 return null;
@@ -696,10 +696,10 @@ public class InfortacticsUVa {
 
             for (int i = 0; i < parts.length && i < enemyDeck.length; i++) {
                 if (parts[i].length() == 3) {
+                    // Extraemos los datos
                     char symbol = parts[i].charAt(0);
-                    int x = Character.getNumericValue(parts[i].charAt(1)); // X = columna
-                    int y = Character.getNumericValue(parts[i].charAt(2)); // Y = fila
-
+                    int x = (parts[i].charAt(1) - '0'); // X = columna
+                    int y = (parts[i].charAt(2) - '0'); // Y = fila
                     // Insertamos el personaje en la baraja
                     enemyDeck[i] = "" + symbol + y + x;
                 }
