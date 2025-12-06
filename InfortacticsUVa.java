@@ -70,7 +70,7 @@ public class InfortacticsUVa {
                     // 1. Limpiamos la pantalla
                     Methods.flushScreen();
                     // 2. Despedida
-                    System.out.println("¡Hasta luego!");
+                    System.out.println(PURPLE + BOLD + "¡Hasta luego!" + RESET);
                     exit = true;
                     break;
 
@@ -78,7 +78,7 @@ public class InfortacticsUVa {
                     // 1. Limpiamos la pantalla
                     Methods.flushScreen();
                     // 2. Informamos al usuario
-                    System.out.println("Opción no válida.");
+                    System.out.println(RED + BOLD + "Opción no válida." + RESET);
                     // 3. Volvemos a mostrar el menu y pedimos opcion
                     option = printMenu(sc);
                     break;
@@ -104,11 +104,12 @@ public class InfortacticsUVa {
                 // 1. Limpiamos pantalla para mayor claridad
                 Methods.flushScreen();
                 // Mostramos la baraja enemiga y los detalles relacionados
-                System.out.println("Baraja enemiga cargada: ");
+                System.out.println(YELLOW + BOLD + "Baraja enemiga cargada: " + RESET);
                 printEnemyDeckDetails(enemyDeck);
                 printBoard(enemyDeck);
                 // 3. Esperamos a que el usuario presione "Enter" para comenzar la partida
-                System.out.println("Presiona [Enter] para comenzar...");
+                System.out.println(); // Espaciado para mejor claridad visual en la salida
+                System.out.println(YELLOW + BOLD + "Presiona [Enter] para comenzar..." + RESET);
                 in.nextLine();
                 // 4. Iniciamos la partida
                 Methods.startGame(in, playerDeck, enemyDeck);
@@ -116,14 +117,14 @@ public class InfortacticsUVa {
                 // 1. Limpiamos la pantalla 
                 Methods.flushScreen();
                 // 2. Mostramos mensaje de error
-                System.out.println("Error al cargar la baraja enemiga.");
-                System.out.println("Verifica que la ruta /Barajas/BarajasEnemigas.txt exista y tenga contenido.");
+                System.out.println(RED + BOLD + "Error al cargar la baraja enemiga." + RESET);
+                System.out.println(RED + BOLD + "Verifica que la ruta /Barajas/BarajasEnemigas.txt exista y tenga contenido." + RESET);
             }
         } else { // Baraja no configurada
             // 1. Limpiamos la pantalla
             Methods.flushScreen();
             // Mostramos mensaje de error
-            System.out.println("¡Configura tu baraja antes!");
+            System.out.println(RED + BOLD + "¡Configura tu baraja antes!" + RESET);
         } // Fin if inicial
         // Limpiamos la terminal
         Methods.flushScreen();
@@ -154,12 +155,12 @@ public class InfortacticsUVa {
             // Limpiamos la pantalla
             Methods.flushScreen();
             // 2. Informamos al usuario
-            System.out.println("Baraja guardada correctamente.");
+            System.out.println(GREEN + BOLD + "Baraja guardada correctamente." + RESET);
         } else { // En caso de que no se haya guardado correctamente notificamos
             // 1. Limpiamos la pantalla
             Methods.flushScreen();
             // 2. Mostramos mensaje de error
-            System.out.println("Error al guardar la baraja.");
+            System.out.println(RED + BOLD + "Error al guardar la baraja." + RESET);
         }
         // Limpiamos la pantalla
         Methods.flushScreen();
@@ -178,13 +179,13 @@ public class InfortacticsUVa {
             // Limpiamos la pantalla
             Methods.flushScreen();
             // 3. Informamos al usuario
-            System.out.println("Baraja cargada correctamente.");
+            System.out.println(GREEN + BOLD + "Baraja cargada correctamente." + RESET);
 
         } else { // En caso de que no se haya cargado correctamente notificamos
             // 1. Limpiamos la pantalla
             Methods.flushScreen();
             // 2. Mostramos mensaje de error
-            System.out.println("Error al cargar la baraja.");
+            System.out.println(RED + BOLD + "Error al cargar la baraja." + RESET);
         }
     } // Fin logicaCargarBaraja
 
@@ -261,8 +262,9 @@ public class InfortacticsUVa {
      * @param elixir Cantidad de elixir.
      */
     public static void printElixir(int elixir) {
-        System.out.println(BOLD + "Elixir Restante 🩸: " + elixir);
-        System.out.println("-----------------------------------------------------" + RESET);
+        System.out.println(PURPLE + BOLD + "---------------------------------------------------" + RESET);
+        System.out.println(PURPLE + BOLD + "Elixir Restante 🩸: " + elixir + RESET);
+        System.out.println(PURPLE + BOLD + "---------------------------------------------------" + RESET);
     }
 
     /**
@@ -421,7 +423,6 @@ public class InfortacticsUVa {
      */
     public static void printEnemyDeckDetails(String[] enemyDeck) {
         // Imprimir detalles de la baraja enemiga
-        System.out.println(BOLD + "Cartas enemigas:" + RESET);
         // Cada personaje es una cadena de 3 caracteres: [Símbolo][X][Y]
         for (int i = 0; i < enemyDeck.length; i++) {
             // Verificar que el personaje no sea nulo y tenga la longitud correcta
@@ -457,8 +458,8 @@ public class InfortacticsUVa {
             currentElixir = calculateCurrentElixir(playerDeck); // Calculamos el elixir restante
             printElixir(currentElixir); // Elixir restante
             // 3. Pedimos jugada al usuario
-            System.out.println("[X] para borrar [0] para guardar y salir");
-            System.out.print("Inserte una jugada [SXY]: ");
+            System.out.println(BOLD + "[X] para borrar [0] para guardar y salir" + RESET);
+            System.out.print(BOLD + "Inserte una jugada [SXY]: " + RESET);
             // Leer entrada del usuario
             String input = in.nextLine();
             String errorMessage = ""; // Variable para almacenar mensaje de error
@@ -466,16 +467,16 @@ public class InfortacticsUVa {
             switch (input.length()) {
                 case 1:     // --- Comandos Especiales --- //
                     switch (input) {    // Switch comandos especiales
+                        case "x":       // --- Borrar Personaje --- //
                         case "X":       // --- Borrar Personaje --- //
                             // Pedimos posición a borrar
-                            System.out.print(BOLD + "Inserte posición a borrar [XY]: ");
+                            System.out.print(BOLD + "Inserte posición a borrar [XY]: " + RESET);
                             String pos = in.nextLine();
                             // Validamos posición
                             if (pos.length() == 2) {    // Formato correcto
                                 // Obtener coordenadas
-                                int x = (int) pos.charAt(1) - '0'; // X = columna
-                                int y = (int) pos.charAt(2) - '0'; // Y = fila
-
+                                int x = (int) pos.charAt(0) - '0'; // X = columna
+                                int y = (int) pos.charAt(1) - '0'; // Y = fila
                                 // Validar rango -- Columnas 0-5, filas 3-5 para jugador
                                 if (x >= 0 && x < 6 && y >= 3 && y < 6) {
                                     // Buscar y borrar personaje en la posición indicada
@@ -495,16 +496,16 @@ public class InfortacticsUVa {
                                     // Si no se ha encontrado personaje en la posición indicada
                                     if (!found) {
                                         // Mostramos mensaje de error
-                                        errorMessage = RED + BOLD + "Posición no ocupada.";
+                                        errorMessage = "Posición ocupada.";
                                     }
 
                                 } else {
                                     // Posición fuera de rango
-                                    errorMessage = RED + BOLD + "Posición inválida (columnas 0-5, filas 3-5).";
+                                    errorMessage = "Posición inválida (columnas 0-5, filas 3-5).";
                                 }
                             } else {
                                 // Formato inválido
-                                errorMessage = RED + BOLD + "Formato inválido.";
+                                errorMessage = "Formato inválido.";
                             }
                             break; // Fin borrar personaje
                         case "0":       // --- Guardar y Salir --- //
@@ -517,7 +518,7 @@ public class InfortacticsUVa {
                             // 1. Limpiamos la pantalla
                             Methods.flushScreen();
                             // 2. Mostramos mensaje de error
-                            errorMessage = RED + BOLD + "Comando no válido.";
+                            errorMessage = RED + BOLD + "Comando no válido." + RESET;
                             break;
                     }// Fin switch comandos especiales
                     break;
@@ -571,24 +572,24 @@ public class InfortacticsUVa {
                             if (posInsertar != -1) {
                                 String personajeInsertar = String.valueOf(symbol) + x + y;
                                 playerDeck[posInsertar] = personajeInsertar;
-                                System.out.println("Personaje " + Methods.getCharacterName(symbol) + " colocado en [" + x + "][" + y + "].");
+                                System.out.println(YELLOW + BOLD + "Personaje " + Methods.getCharacterName(symbol) + " colocado en [" + x + "][" + y + "]." + RESET);
 
                             } else {
-                                System.out.println("No es posible insertar el personaje en la baraja.");
+                                System.out.println(RED + BOLD + "No es posible insertar el personaje en la baraja." + RESET);
                             }
 
                             // Si está ocupada, mostrar mensaje de error
                         } else {
                             // Posición ocupada
-                            errorMessage = RED + BOLD + "Posición ocupada.";
+                            errorMessage = "Posición ocupada.";
                         }
                     } else {
                         // Símbolo inválido, posición fuera de rango o elixir insuficiente
-                        errorMessage = RED + BOLD + "Jugada inválida o elixir insuficiente (columnas 0-5, filas 3-5).";
+                        errorMessage = "Jugada inválida o elixir insuficiente (columnas 0-5, filas 3-5).";
                     }
                     break;
                 default:    // --- Formato inválido --- //
-                    errorMessage = RED + BOLD + "Formato inválido.";
+                    errorMessage = "Formato inválido.";
                     break;
             } // Fin switch longitud input
 
@@ -597,9 +598,9 @@ public class InfortacticsUVa {
                 // 1. Limpiamos la pantalla
                 Methods.flushScreen();
                 // 2. Mostramos el mensaje de error
-                System.out.println(errorMessage);
+                System.out.println(RED + BOLD + errorMessage + RESET);
                 // 3. Esperamos a que el usuario presione Enter para continuar 
-                System.out.println("Presiona Enter para continuar...");
+                System.out.println(YELLOW + BOLD + "Presiona Enter para continuar..." + RESET);
                 in.nextLine();
             } // Fin mostrar mensaje de error
         } // Fin while configurar baraja
@@ -665,33 +666,24 @@ public class InfortacticsUVa {
      * @return True si exitoso.
      */
     public static boolean saveDeck(String[] playerDeck) {
-        // Crear directorio Barajas si no existe
-        try {
-            // Establecer ruta del directorio
-            Path dir = Paths.get("Barajas");
-            // Crear directorio si no existe
-            if (!Files.exists(dir)) {
-                // Creamos el directorio para almacenar las barajas
-                Files.createDirectory(dir);
-            }
-
-            // Guardar baraja en archivo
-            try (PrintWriter writer = new PrintWriter(new FileWriter("Barajas/BarajaGuardada.txt"))) {
-                for (String p : playerDeck) {
-                    // Escribir solo posiciones no vacías
-                    if (p != null && !p.isEmpty()) {
-                        // Escribir personaje en el archivo
-                        writer.print(p + " ");
-                    } // Fin if posición no vacía
-                } // Fin for recorrer baraja
-            } // Fin try guardar baraja
-
-            // Devolver true si exitoso
+        // Definimos la ruta de acceso al archivo donde se guardan las barajas
+        File dir = new File("Barajas/BarajaGuardada.txt");
+        // 1. Intentamos abrir el fichero
+        try (PrintWriter escribe = new PrintWriter(new FileWriter("Barajas/BarajaGuardada.txt"))) {
+            // 2. Escribimos dentro del archivo como esta la configuracion actual del archivo en cuestion
+            for (int i = 0; i < playerDeck.length; i++) {
+                String p = playerDeck[i];
+                // Escribimos solo las posiciones no nulas
+                if (p != null && !p.isEmpty()) {
+                    // Escribimos en el fichero
+                    escribe.print(p + " ");
+                }// Fin if posicion no vacia
+            } // Fin for recorrer baraja
+            // Si todo ha salido bien
             return true;
-
-            // Capturar excepciones de I/O
         } catch (IOException e) {
-            // Devolver false si error
+            // Capturamos cualquier error que haya y lo mostramos por pantalla
+            System.out.println(RED + BOLD + "Error I/O al guardar la baraja: " + e.getMessage() + RESET);
             return false;
         }
     } // Fin saveDeck
