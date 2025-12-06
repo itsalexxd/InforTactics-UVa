@@ -228,9 +228,9 @@ public class InfortacticsUVa {
                 Assets.PRINCESS_SYMBOL, Assets.PRINCESS_ELIXIR, Assets.PRINCESS_ATTACK, Assets.PRINCESS_DEFENSE);
 
         // 4. Valquiria
-        System.out.printf("%-18s %-5s %6d %8d %8d%n",
+        System.out.printf("%-18s %-5s %7s %8d %8d%n",
                 Assets.VALKYRIE_IMAGE + "  " + Assets.VALKYRIE_NAME + "  ",
-                " " + Assets.VALKYRIE_SYMBOL, Assets.VALKYRIE_ELIXIR, Assets.VALKYRIE_ATTACK, Assets.VALKYRIE_DEFENSE);
+                " " + Assets.VALKYRIE_SYMBOL, "  " + Assets.VALKYRIE_ELIXIR, Assets.VALKYRIE_ATTACK, Assets.VALKYRIE_DEFENSE);
 
         // 5. Goblin
         System.out.printf("%-18s %-5s %6d %8d %8d%n",
