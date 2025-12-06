@@ -660,16 +660,18 @@ public class InfortacticsUVa {
     } // Fin isValidSymbol
 
     /**
-     * Guarda la baraja en Barajas/BarajaGuardada.txt.
+     * Guarda la baraja en Barajas/BarajaGuardada.txt. Damos por hecho que la
+     * ruta existe ya que se necesita la misma ruta para el archivo de las
+     * barajas enemigas
      *
      * @param playerDeck Baraja.
      * @return True si exitoso.
      */
     public static boolean saveDeck(String[] playerDeck) {
         // Definimos la ruta de acceso al archivo donde se guardan las barajas
-        File dir = new File("Barajas/BarajaGuardada.txt");
+        String rutaArchivo = "Barajas/BarajaGuardada.txt";
         // 1. Intentamos abrir el fichero
-        try (PrintWriter escribe = new PrintWriter(new FileWriter("Barajas/BarajaGuardada.txt"))) {
+        try (PrintWriter escribe = new PrintWriter(new FileWriter(rutaArchivo))) {
             // 2. Escribimos dentro del archivo como esta la configuracion actual del archivo en cuestion
             for (int i = 0; i < playerDeck.length; i++) {
                 String p = playerDeck[i];
@@ -695,32 +697,30 @@ public class InfortacticsUVa {
      * @return True si exitoso.
      */
     public static boolean loadDeck(String[] playerDeck) {
-        try {
-            // Inicializar baraja vacía
-            Methods.initializeDeck(playerDeck);
-            // Leer contenido del archivo
-            // 
-            String content = new String(Files.readAllBytes(Paths.get("Barajas/BarajaGuardada.txt")));
-            // Dividir contenido en partes y cargar en la baraja
-            //
-            String[] parts = content.trim().split("\\s+");
-            // Cargar personajes en la baraja
-            for (int i = 0; i < parts.length && i < playerDeck.length; i++) {
-                // Validar longitud del personaje
-                if (parts[i].length() == 3) {
-                    // Asignar personaje a la baraja
-                    playerDeck[i] = parts[i];
-                }
-            }
-
-            // Devolver true si exitoso
-            return true;
-
-            // Capturar excepciones de I/O
-        } catch (IOException e) {
-            // Devolver false si error
+        // Inicializamos la baraja del jugador (limpiamos)
+        Methods.initializeDeck(playerDeck);
+        // Cargamos el archivo donde esta la baraja guardada
+        String filePath = "Barajas/BarajaGuardada.txt";
+        File file = new File(filePath);
+        // 1. Comprobamos si el archivo existe dentro del directorio
+        if (!file.exists()) {
+            System.out.println(RED + BOLD + "Archivo no encontrado." + RESET);
             return false;
-        } // Fin try-catch
+        }
+        // 2. Intentamos abrir el archivo con Scanner
+        try (Scanner fileScanner = new Scanner(file)) {
+            // Asumimos que hay una linea guardada ya
+            if (fileScanner.hasNextLine()) {
+                // Extraemos la linea
+                String line = fileScanner.nextLine();
+
+            }
+            return true;
+        } catch (FileNotFoundException e) {
+            // Mostramos el mensaje de error
+            System.out.println(RED + BOLD + "Error al acceder al archivo: " + e.getMessage() + RESET);
+            return false;
+        }
     } // Fin loadDeck
 
     /**
