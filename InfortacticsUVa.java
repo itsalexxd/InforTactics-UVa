@@ -525,7 +525,7 @@ public class InfortacticsUVa {
                 case 3:     // --- Colocar Personaje --- //
                     // Obtener símbolo y coordenadas 
                     char symbol = input.charAt(0); // Personaje
-                    // Combierto a mayuscula en caso de que sea insertada una minuscula
+                    // Convierto a mayuscula en caso de que sea insertada una minuscula
                     if (symbol >= 'a' && symbol <= 'z') {
                         symbol = (char) (symbol - 32);
                     }
