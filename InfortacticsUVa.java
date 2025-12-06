@@ -268,19 +268,19 @@ public class InfortacticsUVa {
         // Rellenar tablero con posiciones vacías
         for (int i = 0; i < Assets.BOARD_ROWS; i++) {
             for (int j = 0; j < Assets.BOARD_COLUMNS; j++) {
-                String noPosition = String.valueOf(Assets.NO_POSITION) + String.valueOf(Assets.NO_POSITION);
+                String noPosition = "" + Assets.NO_POSITION + Assets.NO_POSITION;
                 board[i][j] = (i < 3) ? noPosition : "";
             }
         }// Fin for rellenar espacios vacios
 
         // Colocar personajes en el tablero según la baraja
-        for (String character : deck) {
+        for (int i = 0; i < deck.length; i++) {
             // Cada personaje es una cadena de 3 caracteres: [Símbolo][X][Y]
-            if (character != null && character.length() == 3) {
+            if (deck[i] != null && deck[i].length() == 3) {
                 // Obtener símbolo y coordenadas
-                char symbol = character.charAt(0);
-                int x = Character.getNumericValue(character.charAt(1)); // x = columna
-                int y = Character.getNumericValue(character.charAt(2)); // y = fila
+                char symbol = deck[i].charAt(0);
+                int x = (int) deck[i].charAt(1) - '0'; // x = columna
+                int y = (int) deck[i].charAt(2) - '0'; // y = fila
                 // Colocar el personaje en el tablero si las coordenadas son válidas
                 if (x >= 0 && x < Assets.BOARD_COLUMNS && y >= 0 && y < Assets.BOARD_ROWS) {
                     if (symbol == Assets.VALKYRIE_SYMBOL) {
@@ -290,7 +290,7 @@ public class InfortacticsUVa {
                     }
                 }
             }
-        }// Fin for colocar personajes
+        } // Fin for colocar personajes
 
         // Imprimir el tablero con bordes y alineación
         System.out.println("TABLERO");
@@ -367,20 +367,20 @@ public class InfortacticsUVa {
         // Imprimir detalles de la baraja enemiga
         System.out.println("Cartas enemigas:");
         // Cada personaje es una cadena de 3 caracteres: [Símbolo][X][Y]
-        for (String character : enemyDeck) {
+        for (int i = 0; i < enemyDeck.length; i++) {
             // Verificar que el personaje no sea nulo y tenga la longitud correcta
-            if (character != null && character.length() == 3) {
+            if (enemyDeck[i] != null && enemyDeck[i].length() == 3) {
                 // Obtener símbolo y coordenadas
-                char symbol = character.charAt(0);
-                int x = Character.getNumericValue(character.charAt(1)); // X = columna
-                int y = Character.getNumericValue(character.charAt(2)); // Y = fila
+                char symbol = enemyDeck[i].charAt(0);
+                int x = (int) enemyDeck[i].charAt(1) - '0'; // X = columna
+                int y = (int) enemyDeck[i].charAt(2) - '0'; // Y = fila
                 // Imprimir detalles del personaje
                 String name = Methods.getCharacterName(symbol);
                 String image = Methods.getCharacterImage(symbol);
                 System.out.println(image + " " + name + " en [" + x + "][" + y + "]");
             }
         }
-    }
+    } // Fin funcion printEnemyDeckDetails
 
     /**
      * Configura la baraja del jugador con validaciones (x= columna, y= fila).
@@ -417,8 +417,8 @@ public class InfortacticsUVa {
                             // Validamos posición
                             if (pos.length() == 2) {    // Formato correcto
                                 // Obtener coordenadas
-                                int x = Character.getNumericValue(pos.charAt(0)); // x = columna
-                                int y = Character.getNumericValue(pos.charAt(1)); // y = fila
+                                int x = (int) pos.charAt(1) - '0'; // X = columna
+                                int y = (int) pos.charAt(2) - '0'; // Y = fila
 
                                 // Validar rango -- Columnas 0-5, filas 3-5 para jugador
                                 if (x >= 0 && x < 6 && y >= 3 && y < 6) {
@@ -428,8 +428,8 @@ public class InfortacticsUVa {
                                         // Si la posicion playerDeck[i] no esta vacia - Coincide con las coordenadas - Tiene longitud 3
                                         // Borramos (cambiamos caracter por cadena vacia)
                                         if (playerDeck[i] != null && playerDeck[i].length() == 3
-                                                && Character.getNumericValue(playerDeck[i].charAt(1)) == x
-                                                && Character.getNumericValue(playerDeck[i].charAt(2)) == y) {
+                                                && (playerDeck[i].charAt(1) - '0') == x
+                                                && (playerDeck[i].charAt(2) - '0') == y) {
                                             playerDeck[i] = "";
                                             // Marcamos como encontrado
                                             found = true;
@@ -469,8 +469,8 @@ public class InfortacticsUVa {
                 case 3:     // --- Colocar Personaje --- //
                     // Obtener símbolo y coordenadas 
                     char symbol = input.charAt(0);
-                    int x = Character.getNumericValue(input.charAt(1)); // x = columna
-                    int y = Character.getNumericValue(input.charAt(2)); // y = fila
+                    int x = (int) input.charAt(1) - '0'; // X = columna
+                    int y = (int) input.charAt(2) - '0'; // Y = fila
 
                     // Validar símbolo, rango y elixir suficiente
                     if (isValidSymbol(symbol) && x >= 0 && x < 6 && y >= 3 && y < 6 && currentElixir >= Methods.getCharacterElixir(symbol)) {
@@ -484,7 +484,7 @@ public class InfortacticsUVa {
                             // Obtener personaje en la posición actual
                             String p = playerDeck[pos];
                             // Verificar si el personaje coincide con la posición (x,y)
-                            if (p != null && p.length() == 3 && Character.getNumericValue(p.charAt(1)) == x && Character.getNumericValue(p.charAt(2)) == y) {
+                            if (p != null && p.length() == 3 && (p.charAt(1) - '0') == x && (p.charAt(2) - '0') == y) {
                                 // Posición ocupada, actualizamos variable
                                 occupied = true;
                             }
@@ -555,11 +555,11 @@ public class InfortacticsUVa {
         // Variable para almacenar el elixir usado
         int used = 0;
         // Recorrer la baraja y sumar el elixir de cada personaje insertado
-        for (String p : playerDeck) {
+        for (int i = 0; i < playerDeck.length; i++) {
             // Si la posición no está vacía, sumar el elixir del personaje
-            if (p != null && !p.isEmpty()) {
+            if (playerDeck[i] != null && !playerDeck[i].isEmpty()) {
                 // Sumar el elixir del personaje
-                used += Methods.getCharacterElixir(p.charAt(0));
+                used += Methods.getCharacterElixir(playerDeck[i].charAt(0));
             }
         }
         // Devolver elixir restante
@@ -574,9 +574,9 @@ public class InfortacticsUVa {
      */
     public static boolean hasCharacters(String[] deck) {
         // Recorrer la baraja y verificar si hay al menos un personaje
-        for (String p : deck) {
+        for (int i = 0; i < deck.length; i++) {
             // Si la posición no está vacía, hay al menos un personaje
-            if (p != null && !p.isEmpty()) {
+            if (deck[i] != null && !deck[i].isEmpty()) {
                 // Devolver true
                 return true;
             }
