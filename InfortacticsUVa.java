@@ -421,7 +421,7 @@ public class InfortacticsUVa {
      */
     public static void printEnemyDeckDetails(String[] enemyDeck) {
         // Imprimir detalles de la baraja enemiga
-        System.out.println("Cartas enemigas:");
+        System.out.println(BOLD + "Cartas enemigas:" + RESET);
         // Cada personaje es una cadena de 3 caracteres: [Símbolo][X][Y]
         for (int i = 0; i < enemyDeck.length; i++) {
             // Verificar que el personaje no sea nulo y tenga la longitud correcta
@@ -433,7 +433,7 @@ public class InfortacticsUVa {
                 // Imprimir detalles del personaje
                 String name = Methods.getCharacterName(symbol);
                 String image = Methods.getCharacterImage(symbol);
-                System.out.println(image + " " + name + " en [" + x + "][" + y + "]");
+                System.out.println(BOLD + image + " " + name + " en [" + x + "][" + y + "]" + RESET);
             }
         }
     } // Fin funcion printEnemyDeckDetails
