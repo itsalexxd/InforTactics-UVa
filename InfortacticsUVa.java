@@ -13,6 +13,16 @@ import java.util.Scanner;
 
 public class InfortacticsUVa {
 
+    // Constantes ANSI para Colores y Estilos
+    public static final String RESET = "\u001B[0m";
+    public static final String RED = "\u001B[31m";
+    public static final String GREEN = "\u001B[32m";
+    public static final String YELLOW = "\u001B[33m";
+    public static final String BLUE = "\u001B[34m";
+    public static final String CYAN = "\u001B[36m";
+    public static final String PURPLE = "\u001B[35m";
+    public static final String BOLD = "\u001B[1m";
+
     public static void main(String[] args) {
         // Creamos el objeto sc de tipo Scanner para entrada de usuario por teclado en la consola
         Scanner sc = new Scanner(System.in);
@@ -185,7 +195,7 @@ public class InfortacticsUVa {
      * @return Opción seleccionada.
      */
     public static String printMenu(Scanner in) {
-        System.out.println("┌─────────────────────────────────┐");
+        System.out.println(YELLOW + BOLD + "┌─────────────────────────────────┐");
         System.out.println("│      🏯 InforTactics UVa 🏯     │");
         System.out.println("├─────────────────────────────────┤");
         System.out.println("│   1. NUEVA PARTIDA              │");
@@ -194,8 +204,8 @@ public class InfortacticsUVa {
         System.out.println("│   4. CARGAR BARAJA              │");
         System.out.println("│   5. SALIR                      │");
         System.out.println("└─────────────────────────────────┘");
-        System.out.print("Inserte una opción [1-5]: ");
-        return in.nextLine().trim();
+        System.out.print("Inserte una opción [1-5]: " + RESET);
+        return in.nextLine();
     }
 
     /**
@@ -205,7 +215,7 @@ public class InfortacticsUVa {
     public static void printCharactersInfo() {
         // Personaje (18), Símb. (5), Elixir (6), %Ataque (8), %Defensa (8)
 
-        System.out.println("\nPERSONAJES DISPONIBLES:");
+        System.out.println(BOLD + "\nPERSONAJES DISPONIBLES:");
 
         // Encabezado: Reducimos el ancho del Personaje y el Símbolo para reducir el espacio blanco excesivo
         System.out.printf("%-18s %-5s %6s %8s %8s%n", "Personaje", "Símb.", "Elixir", "%Ataque", "%Defensa");
@@ -242,7 +252,7 @@ public class InfortacticsUVa {
                 Assets.PK_IMAGE + " " + Assets.PK_NAME,
                 Assets.PK_SYMBOL, Assets.PK_ELIXIR, Assets.PK_ATTACK, Assets.PK_DEFENSE);
 
-        System.out.println("---------------------------------------------------");
+        System.out.println("---------------------------------------------------" + RESET);
     }
 
     /**
@@ -251,8 +261,8 @@ public class InfortacticsUVa {
      * @param elixir Cantidad de elixir.
      */
     public static void printElixir(int elixir) {
-        System.out.println("Elixir Restante 🩸: " + elixir);
-        System.out.println("-----------------------------------------------------");
+        System.out.println(BOLD + "Elixir Restante 🩸: " + elixir);
+        System.out.println("-----------------------------------------------------" + RESET);
     }
 
     /**
@@ -275,86 +285,132 @@ public class InfortacticsUVa {
 
         // Colocar personajes en el tablero según la baraja
         for (int i = 0; i < deck.length; i++) {
+            String character = deck[i];
             // Cada personaje es una cadena de 3 caracteres: [Símbolo][X][Y]
-            if (deck[i] != null && deck[i].length() == 3) {
+            if (character != null && character.length() == 3) {
                 // Obtener símbolo y coordenadas
-                char symbol = deck[i].charAt(0);
-                int x = (int) deck[i].charAt(1) - '0'; // x = columna
-                int y = (int) deck[i].charAt(2) - '0'; // y = fila
+                char symbol = character.charAt(0);
+                int x = character.charAt(1) - '0'; // x = columna
+                int y = character.charAt(2) - '0'; // y = fila
                 // Colocar el personaje en el tablero si las coordenadas son válidas
                 if (x >= 0 && x < Assets.BOARD_COLUMNS && y >= 0 && y < Assets.BOARD_ROWS) {
+                    String characterImage = Methods.getCharacterImage(symbol);
                     if (symbol == Assets.VALKYRIE_SYMBOL) {
-                        board[y][x] = Methods.getCharacterImage(symbol) + " "; // Añadir espacio extra para Valquiria y mantener alineación;
+                        board[y][x] = characterImage + " "; // Añadir espacio extra para Valquiria y mantener alineación;
                     } else {
-                        board[y][x] = Methods.getCharacterImage(symbol); // Colocar en [fila][columna]
+                        board[y][x] = characterImage; // Colocar en [fila][columna]
                     }
                 }
             }
         } // Fin for colocar personajes
 
         // Imprimir el tablero con bordes y alineación
-        System.out.println("TABLERO");
-        System.out.print("   ");
+        System.out.println(YELLOW + BOLD + "TABLERO" + RESET);
+        // AUMENTAMOS EL ESPACIADO DE 3 A 4 ESPACIOS para mantener alineación horizontal
+        System.out.print("    ");
 
         // Imprimir números de columna
+        // Aplicamos BOLD y el color del EJE X (lo dejaré en AMARILLO para que destaque)
         for (int j = 0; j < Assets.BOARD_COLUMNS; j++) {
-            System.out.print("  " + j + "  ");
+            System.out.print(YELLOW + BOLD + "  " + j + "  " + RESET);
         }
 
         System.out.println();
 
-        // Imprimir borde superior
-        System.out.print("   ┌");
+        // --- BORDES SUPERIORES ---
+        // El borde superior siempre es de la zona enemiga (ROJO)
+        String colorTopBorder = RED + BOLD;
+        // AUMENTAMOS EL ESPACIADO DE 3 A 4 ESPACIOS antes del borde
+        System.out.print(colorTopBorder + "    ┌" + RESET);
+
         // Imprimir separadores de columna
         for (int j = 0; j < Assets.BOARD_COLUMNS; j++) {
-            System.out.print("────");
+            System.out.print(colorTopBorder + "────" + RESET);
             // Imprimir cruces entre columnas
             if (j < Assets.BOARD_COLUMNS - 1) {
-                System.out.print("┬");
+                System.out.print(colorTopBorder + "┬" + RESET);
             }
         }
         // Cerrar borde superior
-        System.out.println("┐");
+        System.out.println(colorTopBorder + "┐" + RESET);
 
         // Imprimir filas del tablero
         for (int i = 0; i < Assets.BOARD_ROWS; i++) {
+
+            // Determinar el color para la fila actual y su contenido (RED para enemigo, BLUE para jugador)
+            String fgColor = (i < 3) ? RED + BOLD : BLUE + BOLD;
+
             // Imprimir número de fila
-            System.out.print(" " + i + " │");
+            // CAMBIO CLAVE: Usamos %4d para crear 3 espacios de padding y el dígito (e.g., "   0")
+            // Esto reserva 4 caracteres, añadiendo un espacio de separación con la línea vertical.
+            System.out.print(YELLOW + BOLD + String.format("%3d", i) + RESET);
+
+            // Imprimir el separador vertical al inicio de la fila
+            System.out.print(fgColor + " │" + RESET);
+
             // Imprimir celdas de la fila
             for (int j = 0; j < Assets.BOARD_COLUMNS; j++) {
-                System.out.print(String.format(" %-2s │", board[i][j]));
+
+                // Aplicar el color de primer plano al contenido de la celda
+                String cellContent = String.format(" %-2s ", board[i][j]);
+
+                // Imprimimos el contenido coloreado
+                System.out.print(fgColor + cellContent + RESET);
+
+                // Imprimimos el separador vertical (│) de la zona
+                System.out.print(fgColor + "│" + RESET);
             }
 
             System.out.println();
+
             // Imprimir separador entre filas
             if (i < Assets.BOARD_ROWS - 1) {
+
+                // --- LÓGICA DE COLOR DE BORDE INTERMEDIO ACTUALIZADA ---
+                String interBorderColor;
+                if (i == 2) {
+                    // Si i=2, es la línea entre fila 2 y 3 (ahora WHITE)
+                    interBorderColor = RESET + BOLD;
+                } else if (i < 2) {
+                    // i=0, 1: Bordes internos del enemigo (RED)
+                    interBorderColor = RED + BOLD;
+                } else {
+                    // i=2 (Línea divisoria principal) o i=4 (Borde interno del jugador)
+                    interBorderColor = BLUE + BOLD;
+                }
+
                 // Imprimir borde intermedio
-                System.out.print("   ├");
+                // AUMENTAMOS EL ESPACIADO DE 3 A 4 ESPACIOS
+                System.out.print(interBorderColor + "    ├" + RESET);
+
                 // Imprimir separadores de columna
                 for (int j = 0; j < Assets.BOARD_COLUMNS; j++) {
-                    System.out.print("────");
+                    System.out.print(interBorderColor + "────" + RESET);
                     // Imprimir cruces entre columnas
                     if (j < Assets.BOARD_COLUMNS - 1) {
-                        System.out.print("┼");
+                        System.out.print(interBorderColor + "┼" + RESET);
                     }
                 }
                 // Cerrar borde intermedio
-                System.out.println("┤");
+                System.out.println(interBorderColor + "┤" + RESET);
             }
         }
 
-        // Imprimir borde inferior
-        System.out.print("   └");
+        // Imprimir borde inferior (Final de la zona Azul)
+        String colorBottomBorder = BLUE + BOLD;
+        // AUMENTAMOS EL ESPACIADO DE 3 A 4 ESPACIOS
+        System.out.print(colorBottomBorder + "    └" + RESET);
+
         // Imprimir separadores de columna
         for (int j = 0; j < Assets.BOARD_COLUMNS; j++) {
-            System.out.print("────");
+            System.out.print(colorBottomBorder + "────" + RESET);
             // Imprimir cruces entre columnas
             if (j < Assets.BOARD_COLUMNS - 1) {
-                System.out.print("┴");
+                System.out.print(colorBottomBorder + "┴" + RESET);
             }
         }
         // Cerrar borde inferior
-        System.out.println("┘");
+        System.out.println(colorBottomBorder + "┘" + RESET);
 
     }// Fin printBoard
 
@@ -404,7 +460,7 @@ public class InfortacticsUVa {
             System.out.println("[X] para borrar [0] para guardar y salir");
             System.out.print("Inserte una jugada [SXY]: ");
             // Leer entrada del usuario
-            String input = in.nextLine().toUpperCase().trim();
+            String input = in.nextLine();
             String errorMessage = ""; // Variable para almacenar mensaje de error
             // Procesar entrada del usuario
             switch (input.length()) {
@@ -412,8 +468,8 @@ public class InfortacticsUVa {
                     switch (input) {    // Switch comandos especiales
                         case "X":       // --- Borrar Personaje --- //
                             // Pedimos posición a borrar
-                            System.out.print("Inserte posición a borrar [XY]: ");
-                            String pos = in.nextLine().toUpperCase().trim();
+                            System.out.print(BOLD + "Inserte posición a borrar [XY]: ");
+                            String pos = in.nextLine();
                             // Validamos posición
                             if (pos.length() == 2) {    // Formato correcto
                                 // Obtener coordenadas
@@ -439,16 +495,16 @@ public class InfortacticsUVa {
                                     // Si no se ha encontrado personaje en la posición indicada
                                     if (!found) {
                                         // Mostramos mensaje de error
-                                        errorMessage = "Posición no ocupada.";
+                                        errorMessage = RED + BOLD + "Posición no ocupada.";
                                     }
 
                                 } else {
                                     // Posición fuera de rango
-                                    errorMessage = "Posición inválida (columnas 0-5, filas 3-5).";
+                                    errorMessage = RED + BOLD + "Posición inválida (columnas 0-5, filas 3-5).";
                                 }
                             } else {
                                 // Formato inválido
-                                errorMessage = "Formato inválido.";
+                                errorMessage = RED + BOLD + "Formato inválido.";
                             }
                             break; // Fin borrar personaje
                         case "0":       // --- Guardar y Salir --- //
@@ -461,14 +517,18 @@ public class InfortacticsUVa {
                             // 1. Limpiamos la pantalla
                             Methods.flushScreen();
                             // 2. Mostramos mensaje de error
-                            errorMessage = "Comando no válido.";
+                            errorMessage = RED + BOLD + "Comando no válido.";
                             break;
                     }// Fin switch comandos especiales
                     break;
 
                 case 3:     // --- Colocar Personaje --- //
                     // Obtener símbolo y coordenadas 
-                    char symbol = input.charAt(0);
+                    char symbol = input.charAt(0); // Personaje
+                    // Combierto a mayuscula en caso de que sea insertada una minuscula
+                    if (symbol >= 'a' && symbol <= 'z') {
+                        symbol = (char) (symbol - 32);
+                    }
                     int x = (int) input.charAt(1) - '0'; // X = columna
                     int y = (int) input.charAt(2) - '0'; // Y = fila
 
@@ -520,15 +580,15 @@ public class InfortacticsUVa {
                             // Si está ocupada, mostrar mensaje de error
                         } else {
                             // Posición ocupada
-                            errorMessage = "Posición ocupada.";
+                            errorMessage = RED + BOLD + "Posición ocupada.";
                         }
                     } else {
                         // Símbolo inválido, posición fuera de rango o elixir insuficiente
-                        errorMessage = "Jugada inválida o elixir insuficiente (columnas 0-5, filas 3-5).";
+                        errorMessage = RED + BOLD + "Jugada inválida o elixir insuficiente (columnas 0-5, filas 3-5).";
                     }
                     break;
                 default:    // --- Formato inválido --- //
-                    errorMessage = "Formato inválido.";
+                    errorMessage = RED + BOLD + "Formato inválido.";
                     break;
             } // Fin switch longitud input
 
