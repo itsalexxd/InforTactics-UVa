@@ -1,8 +1,5 @@
 /*
-    Cambiar la forma de leer el archivo de Path a Scanner
-    Reemplazar for-each a for
-    Quitar todos los trim/toUpperCase/split/getNumerciValue etc
-    Agregar funciones extra (colores y mas)
+    Split en loadDeck y loadRandomEnemyDeck
     Elixir, variable que no se usa
 
     Optimizar en la medida de lo posible
@@ -697,30 +694,32 @@ public class InfortacticsUVa {
      * @return True si exitoso.
      */
     public static boolean loadDeck(String[] playerDeck) {
-        // Inicializamos la baraja del jugador (limpiamos)
-        Methods.initializeDeck(playerDeck);
-        // Cargamos el archivo donde esta la baraja guardada
-        String filePath = "Barajas/BarajaGuardada.txt";
-        File file = new File(filePath);
-        // 1. Comprobamos si el archivo existe dentro del directorio
-        if (!file.exists()) {
-            System.out.println(RED + BOLD + "Archivo no encontrado." + RESET);
-            return false;
-        }
-        // 2. Intentamos abrir el archivo con Scanner
-        try (Scanner fileScanner = new Scanner(file)) {
-            // Asumimos que hay una linea guardada ya
-            if (fileScanner.hasNextLine()) {
-                // Extraemos la linea
-                String line = fileScanner.nextLine();
-
+        try {
+            // Inicializar baraja vacía
+            Methods.initializeDeck(playerDeck);
+            // Leer contenido del archivo
+            // 
+            String content = new String(Files.readAllBytes(Paths.get("Barajas/BarajaGuardada.txt")));
+            // Dividir contenido en partes y cargar en la baraja
+            //
+            String[] parts = content.trim().split("\\s+");
+            // Cargar personajes en la baraja
+            for (int i = 0; i < parts.length && i < playerDeck.length; i++) {
+                // Validar longitud del personaje
+                if (parts[i].length() == 3) {
+                    // Asignar personaje a la baraja
+                    playerDeck[i] = parts[i];
+                }
             }
+
+            // Devolver true si exitoso
             return true;
-        } catch (FileNotFoundException e) {
-            // Mostramos el mensaje de error
-            System.out.println(RED + BOLD + "Error al acceder al archivo: " + e.getMessage() + RESET);
+
+            // Capturar excepciones de I/O
+        } catch (IOException e) {
+            // Devolver false si error
             return false;
-        }
+        } // Fin try-catch
     } // Fin loadDeck
 
     /**
@@ -769,6 +768,5 @@ public class InfortacticsUVa {
             System.out.println("Error de I/O al cargar Barajas/BarajasEnemigas.txt: " + e.getMessage());
             return null;
         }
-    }
-
+    } // Fin loadRandomEnemyDeck
 } // Fin clase InfortacticsUVa
