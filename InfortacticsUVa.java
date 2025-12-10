@@ -5,7 +5,6 @@
     Optimizar en la medida de lo posible
  */
 import java.io.*;
-import java.nio.file.*;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -695,30 +694,62 @@ public class InfortacticsUVa {
      * @return True si exitoso.
      */
     public static boolean loadDeck(String[] playerDeck) {
-        try {
-            // Inicializar baraja vacía
-            Methods.initializeDeck(playerDeck);
-            // Leer contenido del archivo
-            // 
-            String content = new String(Files.readAllBytes(Paths.get("Barajas/BarajaGuardada.txt")));
-            System.out.println("[DEBUG] -> " + content);
-            // Dividir contenido en partes y cargar en la baraja
-            String[] parts = content.trim().split("\\s+");
-            // Cargar personajes en la baraja
-            for (int i = 0; i < parts.length && i < playerDeck.length; i++) {
-                // Validar longitud del personaje
-                if (parts[i].length() == 3) {
-                    // Asignar personaje a la baraja
-                    playerDeck[i] = parts[i];
-                }
+        final String filePath = "Barajas/BarajaGuardada.txt";
+        File file = new File(filePath);
+
+        // 1. Validar el archivo y preparar la baraja
+        // Si el archivo no existe, no podemos cargar la baraja.
+        if (!file.exists()) {
+            System.out.println("Archivo " + filePath + " no encontrado. Imposible cargar baraja.");
+            return false;
+        }
+
+        // Inicializar baraja vacía (Asumiendo que Methods.initializeDeck existe)
+        Methods.initializeDeck(playerDeck);
+
+        // 2. Leer y procesar el contenido del archivo
+        try (Scanner fileScanner = new Scanner(file)) {
+
+            // Usamos hasNextLine() para leer la primera línea (que debería contener toda la baraja)
+            if (fileScanner.hasNextLine()) {
+                String content = fileScanner.nextLine();
+
+                // Usamos un segundo Scanner para procesar los tokens/partes de la línea
+                // Esto reemplaza content.trim().split("\\s+")
+                try (Scanner lineScanner = new Scanner(content)) {
+
+                    int i = 0; // Índice para recorrer el array playerDeck
+                    int deckSize = playerDeck.length;
+
+                    // Procesar elemento por elemento hasta llenar la baraja o acabar la línea
+                    while (lineScanner.hasNext() && i < deckSize) {
+                        String part = lineScanner.next(); // Lee el siguiente elemento (separado por espacios)
+
+                        // Validar longitud del personaje (debe ser 3 caracteres)
+                        if (part.length() == 3) {
+                            // Asignar personaje a la baraja
+                            playerDeck[i] = part;
+                        } else {
+                            // Opcional: Advertencia si un elemento tiene formato incorrecto
+                            System.err.println("ADVERTENCIA: Elemento de baraja con longitud incorrecta (" + part + "). Saltando.");
+                        }
+
+                        i++; // Avanzamos al siguiente slot de la baraja
+                    }
+                } // lineScanner se cierra automáticamente
+
+            } else {
+                // El archivo existe pero está vacío
+                System.out.println("Archivo " + filePath + " está vacío.");
+                // La baraja ya estará inicializada con valores por defecto gracias a initializeDeck
             }
 
-            // Devolver true si exitoso
+            // Si llegamos aquí sin excepción, es exitoso.
             return true;
 
-            // Capturar excepciones de I/O
-        } catch (IOException e) {
-            // Devolver false si error
+        } catch (FileNotFoundException e) {
+            // Capturar excepciones de I/O (aunque ya verificamos file.exists(), es más seguro)
+            System.out.println("Error de I/O al cargar " + filePath + ": " + e.getMessage());
             return false;
         } // Fin try-catch
     } // Fin loadDeck
@@ -752,7 +783,7 @@ public class InfortacticsUVa {
                 }
             }
         } catch (FileNotFoundException e) {
-            System.out.println(RED + BOLD + "[ERROR] -> Archivo " + filePath + " no encontrado durante el conteo." + RESER);
+            System.out.println(RED + BOLD + "[ERROR] -> Archivo " + filePath + " no encontrado durante el conteo." + RESET);
             return null; // No debería ocurrir si file.exists() pasó
         }
 
