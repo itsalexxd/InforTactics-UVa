@@ -734,20 +734,17 @@ public class InfortacticsUVa {
         // Establecemos la ruta 
         final String filePath = "Barajas/BarajasEnemigas.txt";
         File file = new File(filePath);
-
-        // 1. Validamos el archivo
+        // 1. Validamos que el archivo exista (redundante)
         if (!file.exists()) {
             // Mostramos mensaje de error en caso de que no se encuentre
-            System.out.println(RED + BOLD + "Archivo " + filePath + " no encontrado." + RESET);
+            System.out.println(RED + BOLD + "[ERROR] -> Archivo " + filePath + " no encontrado." + RESET);
             return null;
         }
-
         // --- PRIMERA PASADA: Extraemos las líneas válidas --- //
         int totalValidLines = 0;
         try (Scanner counterScanner = new Scanner(file)) {
             // Mientras hay lineas en el archivo lo recorremos
             while (counterScanner.hasNextLine()) {
-
                 String line = counterScanner.nextLine();
                 // Solo contamos las líneas que no están vacías después de recortar
                 if (!line.isEmpty()) {
@@ -755,12 +752,12 @@ public class InfortacticsUVa {
                 }
             }
         } catch (FileNotFoundException e) {
-            System.out.println("Error: Archivo " + filePath + " no encontrado durante el conteo.");
+            System.out.println(RED + BOLD + "[ERROR] -> Archivo " + filePath + " no encontrado durante el conteo." + RESER);
             return null; // No debería ocurrir si file.exists() pasó
         }
 
         if (totalValidLines == 0) {
-            System.out.println("Archivo " + filePath + " está vacío o solo contiene líneas en blanco.");
+            System.out.println(RED + BOLD + "[ERROR] -> Archivo " + filePath + " está vacío o solo contiene líneas en blanco." + RESET);
             return null;
         }
 
@@ -768,66 +765,54 @@ public class InfortacticsUVa {
         Random random = new Random();
         // Genera un número entre 0 (inclusive) y totalValidLines (exclusive)
         int targetIndex = random.nextInt(totalValidLines);
-
-        // 3. --- SEGUNDA PASADA: Encontrar y procesar la línea ---
+        // 3. --- SEGUNDA PASADA: Encontrar y procesar la línea aleatoria --- //
         String selectedLine = null;
         int currentValidLineIndex = 0;
-
         try (Scanner fileScanner = new Scanner(file)) {
-
+            // Recorremos el archivo 
             while (fileScanner.hasNextLine() && selectedLine == null) {
                 String line = fileScanner.nextLine();
-
+                // Buscamos la linea al azar
                 if (!line.isEmpty()) {
                     if (currentValidLineIndex == targetIndex) {
-                        selectedLine = line; // ¡Encontrada!
+                        selectedLine = line; // Linea aleatoria encontrada
                     }
                     currentValidLineIndex++;
                 }
-            }
+            } // Fin while - buscar linea random
 
         } catch (FileNotFoundException e) {
             // Manejo de errores
+            System.out.println(RED + BOLD + "[ERROR] -> Archivo no encontrado, compruebe que exista.");
             return null;
         }
 
         if (selectedLine == null) {
             // Esto solo pasaría si la lógica fuera errónea, pero es un buen chequeo
-            System.out.println("Error de lógica: La línea aleatoria no fue encontrada.");
+            System.out.println(RED + BOLD + "Error de lógica: La línea aleatoria no fue encontrada." + RESET);
             return null;
         }
-
-        System.out.println("-> LÍNEA SELECCIONADA: " + selectedLine);
-
-        // 4. Inicializar y Construir la Baraja
-        int deckSize = Assets.INITIAL_ELIXIR;
-        String[] enemyDeck = new String[deckSize];
+        // 4. Creamos e inicializamos la baraja enemiga
+        String[] enemyDeck = new String[Assets.INITIAL_ELIXIR];
         Methods.initializeDeck(enemyDeck);
-
         // Usamos un Scanner temporal para procesar la línea sin split()
         try (Scanner lineScanner = new Scanner(selectedLine)) {
-
             int i = 0; // Índice para recorrer el array enemyDeck
-
-            while (lineScanner.hasNext() && i < deckSize) {
+            while (lineScanner.hasNext() && i < Assets.INITIAL_ELIXIR) {
                 String part = lineScanner.next(); // Lee el siguiente elemento (separado por espacios)
-
                 if (part.length() == 3) {
                     // Formato de entrada: "SXY" (S=Símbolo, X=Columna, Y=Fila)
                     char symbol = part.charAt(0);
                     int xChar = part.charAt(1) - '0'; // Columna
                     int yChar = part.charAt(2) - '0'; // Fila
-
                     // Formato de salida: "SYX" (Símbolo, Fila, Columna)
                     enemyDeck[i] = "" + symbol + yChar + xChar;
                 } else {
                     // Advertencia si la longitud no es 3
                 }
-
                 i++; // Avanzamos al siguiente slot de la baraja
-            }
-        }
-
+            } // Fin while - recorre linea elegida
+        } // Fin try
         return enemyDeck;
     } // Fin loadRandomEnemyDeck
 } // Fin clase InfortacticsUVa
