@@ -73,7 +73,22 @@ public class copia {
                     // Volvemos a mostrar el menu y pedimos opcion
                     option = printMenu(sc);
                     break;
-                case "6":       // --- Salir --- //
+
+                case "6":       // --- Creditos --- //
+                    // Limpiamos la terminal
+                    Methods.flushScreen();
+                    Methods.flushScreen();
+                    // Mostramos creditos
+                    printStudentInfo();
+                    System.out.print("Enter para volver: ");
+                    sc.nextLine();
+                    // Limpiamos terminal otra vez
+                    Methods.flushScreen();
+                    Methods.flushScreen();
+                    option = printMenu(sc);
+                    break;
+
+                case "7":       // --- Salir --- //
                     // 1. Limpiamos la pantalla
                     Methods.flushScreen();
                     // 2. Despedida
@@ -96,6 +111,16 @@ public class copia {
     } // Fin main
 
     // ###### METODOS ###### //
+    public static void printStudentInfo() {
+        System.out.println(BOLD + "┌───────────────────────────────────────────┐");
+        System.out.println("│       Practica FPRO - Curso 25/26         │");
+        System.out.println("├───────────────────────────────────────────┤");
+        System.out.println("│ Practica realizada por:                   │");
+        System.out.println("│ Alejandro Garcia Lavandera (X4)           │");
+        System.out.println("│ Beltran Gil Esteban (X9)                  │");
+        System.out.println("└───────────────────────────────────────────┘" + RESET);
+    }
+
     /*
      * Logica principal para iniciar la partida e imprime la partida completa
      * 
@@ -213,15 +238,17 @@ public class copia {
         System.out.println(YELLOW + BOLD + "┌─────────────────────────────────┐");
         System.out.println("│      🏯 InforTactics UVa 🏯     │");
         System.out.println("├─────────────────────────────────┤");
-        System.out.println("│   1. NUEVA PARTIDA              │");
-        System.out.println("│   2. CONFIGURAR BARAJA          │");
-        System.out.println("│   3. GUARDAR BARAJA             │");
-        System.out.println("│   4. CARGAR BARAJA              │");
-        System.out.println("│   5. PVP                        │");
+        System.out.println("│   1. Nueva Partida              │");
+        System.out.println("│   2. Configurar Baraja          │");
+        System.out.println("│   3. Guardar Baraja             │");
+        System.out.println("│   4. Cargar Baraja              │");
+        System.out.println("│   5. JvsJ                       │");
+        System.out.println("│                                 │");
+        System.out.println("│   6. Creditos                   │");
         System.out.println("├─────────────────────────────────┤");
-        System.out.println("│   6. SALIR                      │");
+        System.out.println("│   7. SALIR                      │");
         System.out.println("└─────────────────────────────────┘");
-        System.out.print("Inserte una opción [1-5]: " + RESET);
+        System.out.print("Inserte una opción [1-6]: " + RESET);
         return in.nextLine();
     }
 
