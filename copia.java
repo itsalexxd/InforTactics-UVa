@@ -28,10 +28,6 @@ public class copia {
         // Barajas para el metodo PvP
         String[] barajaJ1 = new String[Assets.INITIAL_ELIXIR];
         String[] barajaJ2 = new String[Assets.INITIAL_ELIXIR];
-        // Elixir inicial del jugador
-        int elixir = Assets.INITIAL_ELIXIR;
-        // Variables para el conteo de victorias y derrotas del jugador
-        int[] resultados = new int[1];
         // Inicializar baraja del jugador vacía
         Methods.initializeDeck(playerDeck);
         Methods.initializeDeck(barajaJ1);
@@ -47,13 +43,13 @@ public class copia {
             switch (option) {
                 case "1":       // --- Nueva Partida --- //
                     // Ejecuto la funcion en cuestion
-                    logicaNuevaPartida(sc, option, playerDeck);
+                    logicaNuevaPartida(sc, playerDeck);
                     // Pedimos la nueva opcion del menu
                     option = printMenu(sc);
                     break;
 
                 case "2":       // --- Configurar Baraja --- //
-                    logicaConfigurarBaraja(sc, playerDeck, elixir);
+                    logicaConfigurarBaraja(sc, playerDeck);
                     // Volvemos a mostrar el menu y pedimos opcion
                     option = printMenu(sc);
                     break;
@@ -65,7 +61,7 @@ public class copia {
                     break;
 
                 case "4":       // --- Cargar Baraja --- //
-                    logicaCargarBaraja(playerDeck, elixir);
+                    logicaCargarBaraja(playerDeck);
                     // 4. Volvemos a mostrar el menu y pedimos opcion
                     option = printMenu(sc);
                     break;
@@ -105,7 +101,7 @@ public class copia {
      * 
      * @param in Scanner, option String, playerDeck String[]
      */
-    public static void logicaNuevaPartida(Scanner in, String option, String[] playerDeck) {
+    public static void logicaNuevaPartida(Scanner in, String[] playerDeck) {
         // 1. Comprobamos que el jugador ha realizado cambios en su baraja y tiene al menos un personaje
         if (hasCharacters(playerDeck)) { // Baraja configurada
             // Cargamos baraja enemiga aleatoria
@@ -120,16 +116,17 @@ public class copia {
                 printBoard(enemyDeck);
                 // 3. Esperamos a que el usuario presione "Enter" para comenzar la partida
                 System.out.println(); // Espaciado para mejor claridad visual en la salida
-                System.out.println(YELLOW + BOLD + "Presiona [Enter] para comenzar..." + RESET);
+                System.out.print(YELLOW + BOLD + "Presiona [Enter] para comenzar" + RESET);
                 in.nextLine();
+                Methods.flushScreen();
                 // 4. Iniciamos la partida
                 Methods.startGame(in, playerDeck, enemyDeck);
             } else { // En caso de que no se haya cargado la baraja enemiga correctamente: 
                 // 1. Limpiamos la pantalla 
                 Methods.flushScreen();
                 // 2. Mostramos mensaje de error
-                System.out.println(RED + BOLD + "Error al cargar la baraja enemiga." + RESET);
-                System.out.println(RED + BOLD + "Verifica que la ruta /Barajas/BarajasEnemigas.txt exista y tenga contenido." + RESET);
+                System.out.println(RED + BOLD + "[ERROR] -> Problema al cargar la baraja enemiga." + RESET);
+                System.out.println(RED + BOLD + "[ERROR] -> Verifica que la ruta /Barajas/BarajasEnemigas.txt exista y tenga contenido." + RESET);
             }
         } else { // Baraja no configurada
             // 1. Limpiamos la pantalla
@@ -137,8 +134,6 @@ public class copia {
             // Mostramos mensaje de error
             System.out.println(RED + BOLD + "¡Configura tu baraja antes!" + RESET);
         } // Fin if inicial
-        // Limpiamos la terminal
-        Methods.flushScreen();
     } // Fin nuevaPartida
 
     /*
@@ -146,11 +141,9 @@ public class copia {
      * 
      * @param 
      */
-    public static void logicaConfigurarBaraja(Scanner sc, String[] playerDeck, int elixir) {
+    public static void logicaConfigurarBaraja(Scanner sc, String[] playerDeck) {
         // 1. Configuramos la baraja del jugador
         configureDeck(sc, playerDeck, "");
-        // 2. Recalculamos el elixir actual
-        elixir = calculateCurrentElixir(playerDeck);
         // 3. Limpiamos la pantalla
         Methods.flushScreen();
     } // Fin logicaConfigurarBaraja
@@ -173,8 +166,6 @@ public class copia {
             // 2. Mostramos mensaje de error
             System.out.println(RED + BOLD + "Error al guardar la baraja." + RESET);
         }
-        // Limpiamos la pantalla
-        Methods.flushScreen();
     } // Fin logicaGuardarBaraja
 
     /*
@@ -182,11 +173,9 @@ public class copia {
      * 
      * @param playerDeck String[], elixir int
      */
-    public static void logicaCargarBaraja(String[] playerDeck, int elixir) {
+    public static void logicaCargarBaraja(String[] playerDeck) {
         // 1. Comprobamos que la bara ya se ha cargado correctamente
         if (loadDeck(playerDeck)) {
-            // 2. Recalculamos el elixir actual
-            elixir = calculateCurrentElixir(playerDeck);
             // Limpiamos la pantalla
             Methods.flushScreen();
             // 3. Informamos al usuario
@@ -534,21 +523,23 @@ public class copia {
                                     // Si no se ha encontrado personaje en la posición indicada
                                     if (!found) {
                                         // Mostramos mensaje de error
-                                        errorMessage = "Posición ocupada.";
+                                        errorMessage = "[ERROR] -> Posición ocupada.";
                                     }
 
                                 } else {
                                     // Posición fuera de rango
-                                    errorMessage = "Posición inválida (columnas 0-5, filas " + minRow + "-" + maxRow + ").";
+                                    errorMessage = "[ERROR] -> Posición inválida (columnas 0-5, filas " + minRow + "-" + maxRow + ").";
                                 }
                             } else {
                                 // Formato inválido
-                                errorMessage = "Formato inválido.";
+                                errorMessage = "[ERROR] -> Formato inválido.";
                             }
                             break; // Fin borrar personaje
                         case "0":       // --- Guardar y Salir --- //
                             // 1. Limpiamos la pantalla
                             Methods.flushScreen();
+                            // Mostramos feedback por terminal
+                            System.out.println(GREEN + BOLD + "Baraja configurada exitosamente!" + RESET);
                             // Marcamos como finalizado
                             finished = true;
                             break;
@@ -556,7 +547,7 @@ public class copia {
                             // 1. Limpiamos la pantalla
                             Methods.flushScreen();
                             // 2. Mostramos mensaje de error
-                            errorMessage = RED + BOLD + "Comando no válido." + RESET;
+                            errorMessage = RED + BOLD + "[ERROR] -> Comando no válido." + RESET;
                             break;
                     }// Fin switch comandos especiales
                     break;
@@ -613,21 +604,21 @@ public class copia {
                                 System.out.println(YELLOW + BOLD + "Personaje " + Methods.getCharacterName(symbol) + " colocado en [" + x + "][" + y + "]." + RESET);
 
                             } else {
-                                System.out.println(RED + BOLD + "No es posible insertar el personaje en la baraja." + RESET);
+                                System.out.println(RED + BOLD + "[ERROR] -> No es posible insertar el personaje en la baraja." + RESET);
                             }
 
                             // Si está ocupada, mostrar mensaje de error
                         } else {
                             // Posición ocupada
-                            errorMessage = "Posición ocupada.";
+                            errorMessage = "[ERROR] -> Posición ocupada.";
                         }
                     } else {
                         // Símbolo inválido, posición fuera de rango o elixir insuficiente
-                        errorMessage = "Jugada inválida o elixir insuficiente (columnas 0-5, filas " + minRow + "-" + maxRow + ").";
+                        errorMessage = "[ERROR] -> Jugada inválida o elixir insuficiente (columnas 0-5, filas " + minRow + "-" + maxRow + ").";
                     }
                     break;
                 default:    // --- Formato inválido --- //
-                    errorMessage = "Formato inválido.";
+                    errorMessage = "[ERROR] -> Formato inválido.";
                     break;
             } // Fin switch longitud input
 
