@@ -8,7 +8,7 @@ import java.io.*;
 import java.util.Random;
 import java.util.Scanner;
 
-public class InfortacticsUVa {
+public class copia {
 
     // Constantes ANSI para Colores y Estilos
     public static final String RESET = "\u001B[0m";
@@ -25,12 +25,17 @@ public class InfortacticsUVa {
         Scanner sc = new Scanner(System.in);
         // Baraja del jugador
         String[] playerDeck = new String[Assets.INITIAL_ELIXIR];
+        // Barajas para el metodo PvP
+        String[] barajaJ1 = new String[Assets.INITIAL_ELIXIR];
+        String[] barajaJ2 = new String[Assets.INITIAL_ELIXIR];
         // Elixir inicial del jugador
         int elixir = Assets.INITIAL_ELIXIR;
         // Variables para el conteo de victorias y derrotas del jugador
         int[] resultados = new int[1];
         // Inicializar baraja del jugador vacía
         Methods.initializeDeck(playerDeck);
+        Methods.initializeDeck(barajaJ1);
+        Methods.initializeDeck(barajaJ2);
         // Limpiar pantalla inicial
         Methods.flushScreen();
         // Mostrar menú inicial y leer opcion insertada
@@ -65,7 +70,14 @@ public class InfortacticsUVa {
                     option = printMenu(sc);
                     break;
 
-                case "5":       // --- Salir --- //
+                case "5":       // --- PvP --- //
+                    logicaPvP(barajaJ1, barajaJ2, sc);
+                    // Limpiamos la pantalla
+                    Methods.flushScreen();
+                    // Volvemos a mostrar el menu y pedimos opcion
+                    option = printMenu(sc);
+                    break;
+                case "6":       // --- Salir --- //
                     // 1. Limpiamos la pantalla
                     Methods.flushScreen();
                     // 2. Despedida
@@ -136,7 +148,7 @@ public class InfortacticsUVa {
      */
     public static void logicaConfigurarBaraja(Scanner sc, String[] playerDeck, int elixir) {
         // 1. Configuramos la baraja del jugador
-        configureDeck(sc, playerDeck);
+        configureDeck(sc, playerDeck, "");
         // 2. Recalculamos el elixir actual
         elixir = calculateCurrentElixir(playerDeck);
         // 3. Limpiamos la pantalla
@@ -188,6 +200,20 @@ public class InfortacticsUVa {
         }
     } // Fin logicaCargarBaraja
 
+    /*
+     * Logica para la funcion de pvp (jugador contra jugador)
+     *  
+     */
+    public static void logicaPvP(String[] barajaJ1, String[] barajaJ2, Scanner in) {
+        // Limpiamos la terminal
+        Methods.flushScreen();
+        // Primero tenemos que configurar cada jugador su propia baraja
+        configureDeck(in, barajaJ1, "Jugador 1");
+        configureDeck(in, barajaJ2, "Jugador 2");
+        // Iniciamos partida
+        Methods.startGame(in, barajaJ1, barajaJ2);
+    }
+
     /**
      * Muestra el menú inicial y lee la opción del usuario.
      *
@@ -202,7 +228,9 @@ public class InfortacticsUVa {
         System.out.println("│   2. CONFIGURAR BARAJA          │");
         System.out.println("│   3. GUARDAR BARAJA             │");
         System.out.println("│   4. CARGAR BARAJA              │");
-        System.out.println("│   5. SALIR                      │");
+        System.out.println("│   5. PVP                        │");
+        System.out.println("├─────────────────────────────────┤");
+        System.out.println("│   6. SALIR                      │");
         System.out.println("└─────────────────────────────────┘");
         System.out.print("Inserte una opción [1-5]: " + RESET);
         return in.nextLine();
@@ -444,13 +472,24 @@ public class InfortacticsUVa {
      * @param in Scanner.
      * @param playerDeck Baraja del jugador.
      */
-    public static void configureDeck(Scanner in, String[] playerDeck) {
+    public static void configureDeck(Scanner in, String[] playerDeck, String jugador) {
         int currentElixir;
         // Bucle hasta que el usuario decida salir
         boolean finished = false;
         while (!finished) {
+            // Determinar zona permitida según el jugador: Jugador 1 -> filas 0-2, Jugador 2 -> filas 3-5
+            int minRow = 3;
+            int maxRow = 5;
+            if (jugador != null && jugador.equals("Jugador 1")) {
+                minRow = 0;
+                maxRow = 2;
+            } else if (jugador != null && jugador.equals("Jugador 2")) {
+                minRow = 3;
+                maxRow = 5;
+            }
             // 1. Limpiamos la pantalla
             Methods.flushScreen();
+            System.out.println("Configura tu baraja " + jugador);
             // 2. Mostramos el tablero, info personajes y elixir restante
             printBoard(playerDeck); // Tablero del jugador
             printCharactersInfo();  // Info personajes
@@ -476,8 +515,8 @@ public class InfortacticsUVa {
                                 // Obtener coordenadas
                                 int x = (int) pos.charAt(0) - '0'; // X = columna
                                 int y = (int) pos.charAt(1) - '0'; // Y = fila
-                                // Validar rango -- Columnas 0-5, filas 3-5 para jugador
-                                if (x >= 0 && x < 6 && y >= 3 && y < 6) {
+                                // Validar rango -- Columnas 0-5, filas dependientes del jugador
+                                if (x >= 0 && x < 6 && y >= minRow && y <= maxRow) {
                                     // Buscar y borrar personaje en la posición indicada
                                     boolean found = false;
                                     for (int i = 0; i < playerDeck.length; i++) {
@@ -500,7 +539,7 @@ public class InfortacticsUVa {
 
                                 } else {
                                     // Posición fuera de rango
-                                    errorMessage = "Posición inválida (columnas 0-5, filas 3-5).";
+                                    errorMessage = "Posición inválida (columnas 0-5, filas " + minRow + "-" + maxRow + ").";
                                 }
                             } else {
                                 // Formato inválido
@@ -533,7 +572,7 @@ public class InfortacticsUVa {
                     int y = (int) input.charAt(2) - '0'; // Y = fila
 
                     // Validar símbolo, rango y elixir suficiente
-                    if (isValidSymbol(symbol) && x >= 0 && x < 6 && y >= 3 && y < 6 && currentElixir >= Methods.getCharacterElixir(symbol)) {
+                    if (isValidSymbol(symbol) && x >= 0 && x < 6 && y >= minRow && y <= maxRow && currentElixir >= Methods.getCharacterElixir(symbol)) {
                         // Verificar si la posición ya está ocupada
                         boolean occupied = false;
 
@@ -584,7 +623,7 @@ public class InfortacticsUVa {
                         }
                     } else {
                         // Símbolo inválido, posición fuera de rango o elixir insuficiente
-                        errorMessage = "Jugada inválida o elixir insuficiente (columnas 0-5, filas 3-5).";
+                        errorMessage = "Jugada inválida o elixir insuficiente (columnas 0-5, filas " + minRow + "-" + maxRow + ").";
                     }
                     break;
                 default:    // --- Formato inválido --- //
