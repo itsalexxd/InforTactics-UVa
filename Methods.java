@@ -82,9 +82,9 @@ public class Methods {
 
         System.out.println("\n\n");
         if (winner == 1) {
-            System.out.println("�Enhorabuena, Has ganado!");
+            System.out.println("¡Enhorabuena, Has ganado!");
         } else if (winner == 0) {
-            System.out.println("Vaya.. �Perdiste!");
+            System.out.println("¡Vaya... Perdiste!");
         } else {
             System.out.println("La partida ha terminado en empate.");
         }
@@ -92,9 +92,9 @@ public class Methods {
     }
 
     /**
-     * Procedimiento que rellena el vector de juego en funci�n de los vectores
+     * Procedimiento que rellena el vector de juego en funcin de los vectores
      * propios y del enemigo Primero, inicializamos el vector de juego a todas
-     * sus posiciones con cadena vac�a "". Segundo, alternamos los diferentes
+     * sus posiciones con cadena vaca "". Segundo, alternamos los diferentes
      * personajes en el vector: pares->jugador, impares->enemigo
      *
      * @author Alejandro Ortega
@@ -128,7 +128,7 @@ public class Methods {
     }
 
     /**
-     * Procedimiento que simula limpiar la consola al a�adir 10 saltos de l�nea
+     * Procedimiento que simula limpiar la consola al aadir 10 saltos de lnea
      * (no se puede hacer de otra manera con la consola de Eclipse)
      *
      * @author Alejandro Ortega
@@ -140,15 +140,15 @@ public class Methods {
     }
 
     /**
-     * Funci�n que comprueba si hay un ganador, comprobando los personajes vivos
+     * Funcin que comprueba si hay un ganador, comprobando los personajes vivos
      * en el vector de juego
      *
      * @author Alejandro Ortega
      * @param gameDeck Referencia al vector de juego con los personajes
      * intercalados
-     * @param j	Posici�n en el vector del turno actual: pares->jugador
+     * @param j	Posicin en el vector del turno actual: pares->jugador
      * impares->enemigo
-     * @return	1 Ganador Jugador; 0 Ganador Enemigo; -1 No hay ganador todav�a
+     * @return	1 Ganador Jugador; 0 Ganador Enemigo; -1 No hay ganador todava
      */
     public static int checkWinner(String[] gameDeck, int j) {
         int resultado;
@@ -178,10 +178,10 @@ public class Methods {
      *
      * @author Alejandro Ortega
      * @param gameDeck Referencia al vector de juego
-     * @param j	Posici�n del vector que representa el turno: pares->jugador,
+     * @param j	Posicin del vector que representa el turno: pares->jugador,
      * impares->enemigo
      * @param advance Valor que indica si el personaje debe avanzar si no hay
-     * ning�n jugador al que golpear
+     * ningn jugador al que golpear
      */
     public static void valkyrieAttack(String[] gameDeck, int j, boolean advance) {
         String turn, noTurn;
@@ -301,7 +301,7 @@ public class Methods {
      *
      * @author Alejandro Ortega
      * @param gameDeck Referencia al vector de juego
-     * @param j	Posici�n del vector que representa el turno: pares->jugador,
+     * @param j	Posicin del vector que representa el turno: pares->jugador,
      * impares->enemigo
      */
     public static void dragonAttack(String[] gameDeck, int j) {
@@ -365,12 +365,12 @@ public class Methods {
     }
 
     /**
-     * Procedimiento que realiza un ataque al personaje m�s lejano utilizando la
-     * distancia eucl�dea: Arquera & Princesa
+     * Procedimiento que realiza un ataque al personaje ms lejano utilizando la
+     * distancia eucldea: Arquera & Princesa
      *
      * @author Alejandro Ortega
      * @param gameDeck Referencia al vector de juego
-     * @param j	Posici�n del vector que representa el turno: pares->jugador,
+     * @param j	Posicin del vector que representa el turno: pares->jugador,
      * impares->enemigo
      */
     public static void archerAttack(String[] gameDeck, int j) {
@@ -414,7 +414,7 @@ public class Methods {
 
     /**
      * Procedimiento que escribe en un vector de Strings todas las posiciones a
-     * cadenas vacias
+     * cadenas vacas
      *
      * @author Alejandro Ortega
      * @param deck Referencia del vector a inicializar
@@ -426,11 +426,11 @@ public class Methods {
     }
 
     /**
-     * Funci�n que ejecuta los porcentajes de lucha entre dos personajes
+     * Funcin que ejecuta los porcentajes de lucha entre dos personajes
      *
      * @author Alejandro Ortega
-     * @param attackerSymbol Caracter del s�mbolo que ataca
-     * @param defenderSymbol Caracter del s�mbolo que defiende
+     * @param attackerSymbol Carcter del smbolo que ataca
+     * @param defenderSymbol Carcter del smbolo que defiende
      * @return	V: Atacante ha matado a defensor, F: Atacante NO ha matado a
      * defensor
      */
@@ -457,7 +457,7 @@ public class Methods {
                 attackerProb = Assets.PK_ATTACK;
                 break;
             default:
-                System.out.println("S�mbolo err�neo");
+                System.out.println("Smbolo errneo");
                 return false;
         }
 
@@ -481,7 +481,7 @@ public class Methods {
                 defenderProb = Assets.PK_DEFENSE;
                 break;
             default:
-                System.out.println("S�mbolo err�neo");
+                System.out.println("Smbolo errneo");
                 return false;
         }
 
@@ -489,11 +489,11 @@ public class Methods {
     }
 
     /**
-     * Funci�n que devuelve el nombre de un personaje dado su car�cter
+     * Funcin que devuelve el nombre de un personaje dado su carcter
      *
      * @author Alejandro Ortega
-     * @param symbol Car�cter del personaje
-     * @return Nombre del personaje o "S�mbolo err�neo" si no existe
+     * @param symbol Carcter del personaje
+     * @return Nombre del personaje o "Smbolo errneo" si no existe
      */
     public static String getCharacterName(char symbol) {
         String name = "";
@@ -518,18 +518,18 @@ public class Methods {
                 name = Assets.PK_NAME;
                 break;
             default:
-                System.out.println("S�mbolo err�neo");
+                System.out.println("Smbolo errneo");
         }
 
         return name;
     }
 
     /**
-     * Funci�n que devuelve el icono de un personaje dado su car�cter
+     * Funcin que devuelve el icono de un personaje dado su carcter
      *
      * @author Alejandro Ortega
-     * @param symbol Car�cter del personaje
-     * @return Icono del personaje en formato String o "S�mbolo err�neo" si no
+     * @param symbol Carcter del personaje
+     * @return Icono del personaje en formato String o "Smbolo errneo" si no
      * existe
      */
     public static String getCharacterImage(char symbol) {
@@ -555,17 +555,17 @@ public class Methods {
                 image = Assets.PK_IMAGE;
                 break;
             default:
-                System.out.println("S�mbolo err�neo");
+                System.out.println("Smbolo errneo");
         }
         return image;
     }
 
     /**
-     * Funci�n que devuelve el coste de elixir de un personaje dado su car�cter
+     * Funcin que devuelve el coste de elixir de un personaje dado su carcter
      *
      * @author Alejandro Ortega
-     * @param symbol Car�cter del personaje
-     * @return Coste de elixir o "S�mbolo err�neo" si no existe
+     * @param symbol Carcter del personaje
+     * @return Coste de elixir o "Smbolo errneo" si no existe
      */
     public static int getCharacterElixir(char symbol) {
         int elixir = 0;
@@ -590,7 +590,7 @@ public class Methods {
                 elixir = Assets.PK_ELIXIR;
                 break;
             default:
-                System.out.println("S�mbolo err�neo");
+                System.out.println("Smbolo errneo");
         }
         return elixir;
     }

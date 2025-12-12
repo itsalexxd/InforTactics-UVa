@@ -1,14 +1,9 @@
-/*
-    Split en loadDeck y loadRandomEnemyDeck
-    Elixir, variable que no se usa
 
-    Optimizar en la medida de lo posible
- */
 import java.io.*;
 import java.util.Random;
 import java.util.Scanner;
 
-public class copia {
+public class InfortacticsUVa {
 
     // Constantes ANSI para Colores y Estilos
     public static final String RESET = "\u001B[0m";
@@ -30,7 +25,6 @@ public class copia {
         Methods.initializeDeck(barajaJ2);
         Methods.flushScreen();
         String option = printMenu(sc);
-        // Bucle principal del menu
         boolean exit = false;
         while (!exit) {
             switch (option) {
@@ -54,13 +48,18 @@ public class copia {
                     option = printMenu(sc);
                     break;
 
-                case "5":       // --- PvP --- //
+                case "5":       // --- Gestionar Barajas --- //
+                    logicaGestionarBarajas(sc, playerDeck);
+                    option = printMenu(sc);
+                    break;
+
+                case "6":       // --- PvP --- //
                     logicaPvP(barajaJ1, barajaJ2, sc);
                     Methods.flushScreen();
                     option = printMenu(sc);
                     break;
 
-                case "6":       // --- Creditos --- //
+                case "7":       // --- Creditos --- //
                     Methods.flushScreen();
                     Methods.flushScreen();
                     printStudentInfo();
@@ -71,7 +70,7 @@ public class copia {
                     option = printMenu(sc);
                     break;
 
-                case "7":       // --- Salir --- //
+                case "8":       // --- Salir --- //
                     Methods.flushScreen();
                     System.out.println(PURPLE + BOLD + "¡Hasta luego!" + RESET);
                     exit = true;
@@ -88,22 +87,37 @@ public class copia {
     }
 
     // ###### METODOS ###### //
-    public static void printStudentInfo() {
-        System.out.println(BOLD);
-        System.out.println("┌───────────────────────────────────────────┐");
-        System.out.println("│       Práctica FPRO - Curso 25/26         │");
-        System.out.println("├───────────────────────────────────────────┤");
-        System.out.println("│ Practica realizada por:                   │");
-        System.out.println("│ - Alejandro García Lavandera (X4)         │");
-        System.out.println("│ - Beltran Gil Esteban (X9)                │");
-        System.out.println("└───────────────────────────────────────────┘");
-        System.out.println(RESET);
+    /**
+     * Muestra el menú inicial y lee la opción del usuario.
+     *
+     * @param in Scanner para entrada.
+     * @return Opción seleccionada.
+     */
+    public static String printMenu(Scanner in) {
+        System.out.println(YELLOW + BOLD);
+        System.out.println("┌─────────────────────────────────┐");
+        System.out.println("│      🏯 InforTactics UVa 🏯     │");
+        System.out.println("├─────────────────────────────────┤");
+        System.out.println("│   1. Nueva Partida              │");
+        System.out.println("│   2. Configurar Baraja          │");
+        System.out.println("│   3. Guardar Baraja             │");
+        System.out.println("│   4. Cargar Baraja              │");
+        System.out.println("│   5. Gestión Barajas            │");
+        System.out.println("│   6. JcJ                        │");
+        System.out.println("│   7. Créditos                   │");
+        System.out.println("├─────────────────────────────────┤");
+        System.out.println("│   8. Salir                      │");
+        System.out.println("└─────────────────────────────────┘");
+        System.out.print("Inserte una opción [1-8]: " + RESET);
+        return in.nextLine();
     }
 
-    /*
+    /**
      * Logica principal para iniciar la partida e imprime la partida completa
-     * 
-     * @param in Scanner, option String, playerDeck String[]
+     *
+     * @param in Scanner
+     * @param option String
+     * @param playerDeck String[]
      */
     public static void logicaNuevaPartida(Scanner in, String[] playerDeck) {
         if (hasCharacters(playerDeck)) {
@@ -129,19 +143,21 @@ public class copia {
         }
     }
 
-    /*
+    /**
      * Logica para el caso 2 del switch, configurar la baraja del jugador
-     * 
-     * @param 
+     *
+     * @param sc Scanner
+     * @param playerDeck String[]
      */
     public static void logicaConfigurarBaraja(Scanner sc, String[] playerDeck) {
-        configureDeck(sc, playerDeck, "");
+        configureDeck(sc, playerDeck, "", "oasdfg", "");
         Methods.flushScreen();
     }
 
-    /*
-     * Logica para guardar la baraja dentro de la ruta /Barajas/BarajasGuardadas.txt
-     * 
+    /**
+     * Logica para guardar la baraja dentro de la ruta
+     * /Barajas/BarajasGuardadas.txt
+     *
      * @param playerDeck String[]
      */
     public static void logicaGuardarBaraja(String[] playerDeck) {
@@ -154,10 +170,12 @@ public class copia {
         }
     }
 
-    /*
-     * Logica para cargar la baraja guardada en el archivo /Baraja/BarajasGuardadas.txt
-     * 
-     * @param playerDeck String[], elixir int
+    /**
+     * Logica para cargar la baraja guardada en el archivo
+     * /Baraja/BarajasGuardadas.txt
+     *
+     * @param playerDeck String[]
+     * @param elixir int
      */
     public static void logicaCargarBaraja(String[] playerDeck) {
         if (loadDeck(playerDeck)) {
@@ -170,34 +188,187 @@ public class copia {
         }
     }
 
+    /**
+     * Logica para gestionar barajas: guardar, cargar, listar
+     *
+     * @param sc Scanner
+     * @param playerDeck String[]
+     */
+    public static void logicaGestionarBarajas(Scanner sc, String[] playerDeck) {
+        boolean back = false;
+        while (!back) {
+            Methods.flushScreen();
+            System.out.println(YELLOW + BOLD);
+            System.out.println("┌─────────────────────────────┐");
+            System.out.println("│     Gestionar Barajas       │");
+            System.out.println("├─────────────────────────────┤");
+            System.out.println("│   1. Guardar Baraja         │");
+            System.out.println("│   2. Cargar Baraja          │");
+            System.out.println("│   3. Listar Barajas         │");
+            System.out.println("│   4. Volver                 │");
+            System.out.println("└─────────────────────────────┘");
+            System.out.print("Inserte una opción [1-4]: ");
+            System.out.print(RESET);
+            String subOption = sc.nextLine();
+            switch (subOption) {
+                case "1":       // --- Guardar Baraja --- //
+                    System.out.print(BOLD + "Introduce un nombre para guardar esta baraja: " + RESET);
+                    String name = sc.nextLine();
+                    if (saveDeckNamed(playerDeck, name)) {
+                        System.out.println(GREEN + BOLD + "Baraja guardada como '" + name + "'." + RESET);
+                    } else {
+                        System.out.println(RED + BOLD + "[ERROR] -> Problema al guardar la baraja." + RESET);
+                    }
+                    System.out.print(YELLOW + BOLD + "Presiona Enter para continuar..." + RESET);
+                    sc.nextLine();
+                    break;
+                case "2":       // --- Cargar Baraja --- //
+                    listDecks();
+                    System.out.print(BOLD + "Introduce el nombre de la baraja que deseas cargar: " + RESET);
+                    String loadName = sc.nextLine();
+                    if (loadDeckNamed(playerDeck, loadName)) {
+                        System.out.println(GREEN + BOLD + "¡Baraja '" + loadName + "' cargada exitosamente!." + RESET);
+                    } else {
+                        System.out.println(RED + BOLD + "[ERROR] -> Problema al cargar la baraja." + RESET);
+                    }
+                    System.out.print(YELLOW + BOLD + "Presiona Enter para continuar..." + RESET);
+                    sc.nextLine();
+                    break;
+                case "3":       // --- Listar Barajas --- //
+                    System.out.println(BOLD + "Barajas guardadas:" + RESET);
+                    listDecks();
+                    System.out.print(YELLOW + BOLD + "Presiona Enter para continuar..." + RESET);
+                    sc.nextLine();
+                    break;
+                case "4":       // --- Volver --- //
+                    back = true;
+                    break;
+                default:        // --- Opcion no válida --- //
+                    System.out.println(RED + BOLD + "[ERROR] -> Opción insertada no válida." + RESET);
+                    System.out.print(YELLOW + BOLD + "Presiona Enter para continuar..." + RESET);
+                    sc.nextLine();
+                    break;
+            }
+        }
+    }
+
+    /**
+     * Guarda la baraja con un nombre específico en Barajas/[name].txt.
+     *
+     * @param playerDeck Baraja.
+     * @param name Nombre del archivo.
+     * @return True si exitoso.
+     */
+    public static boolean saveDeckNamed(String[] playerDeck, String name) {
+        String rutaArchivo = "Barajas/" + name + ".txt";
+        try (PrintWriter escribe = new PrintWriter(new FileWriter(rutaArchivo))) {
+            for (int i = 0; i < playerDeck.length; i++) {
+                String p = playerDeck[i];
+                if (p != null && !p.isEmpty()) {
+                    escribe.print(p + " ");
+                }
+            }
+            return true;
+        } catch (IOException e) {
+            System.out.println(RED + BOLD + "Error I/O al guardar la baraja: " + e.getMessage() + RESET);
+            return false;
+        }
+    }
+
+    /**
+     * Carga la baraja con un nombre específico desde Barajas/[name].txt.
+     *
+     * @param playerDeck Baraja a cargar.
+     * @param name Nombre del archivo.
+     * @return True si exitoso.
+     */
+    public static boolean loadDeckNamed(String[] playerDeck, String name) {
+        String filePath = "Barajas/" + name + ".txt";
+        File file = new File(filePath);
+        if (!file.exists()) {
+            System.out.println("Archivo " + filePath + " no encontrado.");
+            return false;
+        }
+        Methods.initializeDeck(playerDeck);
+        try (Scanner fileScanner = new Scanner(file)) {
+            if (fileScanner.hasNextLine()) {
+                String content = fileScanner.nextLine();
+                try (Scanner lineScanner = new Scanner(content)) {
+                    int i = 0;
+                    while (lineScanner.hasNext() && i < playerDeck.length) {
+                        String part = lineScanner.next();
+                        if (part.length() == 3) {
+                            playerDeck[i] = part;
+                        }
+                        i++;
+                    }
+                }
+            }
+            return true;
+        } catch (FileNotFoundException e) {
+            System.out.println("Error al acceder al archivo: " + e.getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Lista las barajas guardadas en Barajas/.
+     */
+    public static void listDecks() {
+        File dir = new File("Barajas/");
+        if (!dir.exists() || !dir.isDirectory()) {
+            System.out.println("[ERROR] -> Directorio Barajas/ no encontrado.");
+            return;
+        }
+        File[] files = dir.listFiles();
+        if (files == null || files.length == 0) {
+            System.out.println("[ERROR] -> No hay barajas guardadas.");
+            return;
+        }
+        for (int i = 0; i < files.length; i++) {
+            File file = files[i];
+            if (file.isFile() && file.getName().endsWith(".txt")) {
+                String name = file.getName();
+                // Remover .txt del nombre
+                String deckName = name.substring(0, name.length() - 4);
+                System.out.println("- " + deckName);
+            }
+        }
+    }
+
     /*
      * Logica para la funcion de pvp (jugador contra jugador)
      *  
      */
     public static void logicaPvP(String[] barajaJ1, String[] barajaJ2, Scanner sc) {
-        System.out.print("Nombre jugador 1: ");
+        Methods.initializeDeck(barajaJ1);
+        Methods.initializeDeck(barajaJ2);
+        Methods.flushScreen();
+        System.out.print("Nombre del jugador 1: ");
         String jugador1 = sc.nextLine();
-        System.out.print("Nombre jugador 2: ");
-        String jugador2 = sc.nextLine();
         Methods.flushScreen();
         boolean conf = false;
-        while (conf) {
-            configureDeck(sc, barajaJ1, jugador1);
+        while (!conf) {
+            configureDeck(sc, barajaJ1, jugador1, jugador1, "");
             if (!hasCharacters(barajaJ1)) {
                 Methods.flushScreen();
-                System.out.print(RED + BOLD + "[ERROR] -> Configura tu baraja antes!" + RESET);
+                System.out.print(RED + BOLD + "[ERROR] -> Configura tu baraja antes [J1]" + jugador1 + "!" + RESET);
                 sc.nextLine();
                 Methods.flushScreen();
             } else {
                 conf = true;
             }
         }
+
+        Methods.flushScreen();
+        System.out.print("Nombre del jugador 2: ");
+        String jugador2 = sc.nextLine();
         conf = false;
-        while (conf) {
-            configureDeck(sc, barajaJ2, jugador2);
+        while (!conf) {
+            configureDeck(sc, barajaJ2, jugador2, jugador1, jugador2);
             if (!hasCharacters(barajaJ2)) {
                 Methods.flushScreen();
-                System.out.println(RED + BOLD + "[ERROR] -> Configura tu baraja antes!" + RESET);
+                System.out.println(RED + BOLD + "[ERROR] -> Configura tu baraja antes [J2]" + jugador2 + "!" + RESET);
                 sc.nextLine();
                 Methods.flushScreen();
             } else {
@@ -208,27 +379,18 @@ public class copia {
     }
 
     /**
-     * Muestra el menú inicial y lee la opción del usuario.
-     *
-     * @param in Scanner para entrada.
-     * @return Opción seleccionada.
+     * Muestra informacion sobre los responsables de la practica
      */
-    public static String printMenu(Scanner in) {
-        System.out.println(YELLOW + BOLD);
-        System.out.println("┌─────────────────────────────────┐");
-        System.out.println("│      🏯 InforTactics UVa 🏯     │");
-        System.out.println("├─────────────────────────────────┤");
-        System.out.println("│   1. Nueva Partida              │");
-        System.out.println("│   2. Configurar Baraja          │");
-        System.out.println("│   3. Guardar Baraja             │");
-        System.out.println("│   4. Cargar Baraja              │");
-        System.out.println("│   5. JcJ                        │");
-        System.out.println("│   6. Creditos                   │");
-        System.out.println("├─────────────────────────────────┤");
-        System.out.println("│   7. SALIR                      │");
-        System.out.println("└─────────────────────────────────┘");
-        System.out.print("Inserte una opción [1-7]: " + RESET);
-        return in.nextLine();
+    public static void printStudentInfo() {
+        System.out.println(BOLD);
+        System.out.println("┌───────────────────────────────────────────┐");
+        System.out.println("│       Práctica FPRO - Curso 25/26         │");
+        System.out.println("├───────────────────────────────────────────┤");
+        System.out.println("│ Practica realizada por:                   │");
+        System.out.println("│ - Alejandro García Lavandera (X4)         │");
+        System.out.println("│ - Beltran Gil Esteban (X9)                │");
+        System.out.println("└───────────────────────────────────────────┘");
+        System.out.println(RESET);
     }
 
     /**
@@ -404,7 +566,7 @@ public class copia {
      * @param in Scanner.
      * @param playerDeck Baraja del jugador.
      */
-    public static void configureDeck(Scanner in, String[] playerDeck, String jugador) {
+    public static void configureDeck(Scanner in, String[] playerDeck, String jugador, String jugador1, String jugador2) {
         int currentElixir;
         // Bucle hasta que el usuario decida salir
         boolean finished = false;
@@ -412,10 +574,10 @@ public class copia {
             // Determinar zona permitida según el jugador: Jugador 1 -> filas 0-2, Jugador 2 -> filas 3-5
             int minRow = 3;
             int maxRow = 5;
-            if (jugador != null && jugador.equals("Jugador 1")) {
+            if (jugador != null && jugador.equals(jugador1)) {
                 minRow = 0;
                 maxRow = 2;
-            } else if (jugador != null && jugador.equals("Jugador 2")) {
+            } else if (jugador != null && jugador.equals(jugador2)) {
                 minRow = 3;
                 maxRow = 5;
             }
@@ -506,8 +668,7 @@ public class copia {
                                 i++;
                             }
                             if (posInsertar != -1) {
-                                // TODO quitar valueOF
-                                String personajeInsertar = String.valueOf(symbol) + x + y;
+                                String personajeInsertar = "" + symbol + x + y;
                                 playerDeck[posInsertar] = personajeInsertar;
                                 System.out.println(YELLOW + BOLD + "Personaje " + Methods.getCharacterName(symbol) + " colocado en [" + x + "][" + y + "]." + RESET);
                             } else {
