@@ -629,7 +629,7 @@ public class InfortacticsUVa {
                             break;
                         case "0":       // --- Guardar y Salir --- //
                             Methods.flushScreen();
-                            System.out.println(GREEN + BOLD + "Baraja configurada exitosamente!" + RESET);
+                            System.out.println(GREEN + BOLD + "¡Baraja configurada exitosamente!" + RESET);
                             finished = true;
                             break;
                         default:        // --- Comando no válido --- //
