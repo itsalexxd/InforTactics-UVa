@@ -3,18 +3,60 @@ import java.io.*;
 import java.util.Random;
 import java.util.Scanner;
 
+/**
+ * Clase principal que implementa la lógica de menú y control de flujo para el
+ * juego Infortactics UVa. Permite a los jugadores configurar barajas, iniciar
+ * partidas de un jugador (PvE) o multijugador (PvP), y gestionar la
+ * carga/guardado de barajas.
+ *
+ * @author Alejandro García Lavandera
+ * @author Beltran Gil Esteban
+ * @version 1.0
+ * @since 2025-12-13
+ */
 public class InfortacticsUVa {
 
     // Constantes ANSI para Colores y Estilos
+    /**
+     * Código ANSI para resetear el color y estilo a los valores
+     * predeterminados.
+     */
     public static final String RESET = "\u001B[0m";
+    /**
+     * Código ANSI para color Rojo.
+     */
     public static final String RED = "\u001B[31m";
+    /**
+     * Código ANSI para color Verde.
+     */
     public static final String GREEN = "\u001B[32m";
+    /**
+     * Código ANSI para color Amarillo.
+     */
     public static final String YELLOW = "\u001B[33m";
+    /**
+     * Código ANSI para color Azul.
+     */
     public static final String BLUE = "\u001B[34m";
+    /**
+     * Código ANSI para color Cian.
+     */
     public static final String CYAN = "\u001B[36m";
+    /**
+     * Código ANSI para color Púrpura.
+     */
     public static final String PURPLE = "\u001B[35m";
+    /**
+     * Código ANSI para estilo Negrita.
+     */
     public static final String BOLD = "\u001B[1m";
 
+    /**
+     * Método principal que inicializa el juego, configura las barajas y
+     * gestiona el bucle principal del menú de opciones.
+     *
+     * @param args Argumentos de la línea de comandos (no utilizados).
+     */
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         String[] playerDeck = new String[Assets.INITIAL_ELIXIR / 2];
@@ -28,38 +70,33 @@ public class InfortacticsUVa {
         boolean exit = false;
         while (!exit) {
             switch (option) {
-                case "1":       // --- Nueva Partida --- //
+                case "1":      // --- Nueva Partida --- //
                     logicaNuevaPartida(sc, playerDeck);
                     option = printMenu(sc);
                     break;
 
-                case "2":       // --- Configurar Baraja --- //
+                case "2":      // --- Configurar Baraja --- //
                     logicaConfigurarBaraja(sc, playerDeck);
                     option = printMenu(sc);
                     break;
 
-                case "3":       // --- Guardar Baraja --- //
+                case "3":      // --- Guardar Baraja --- //
                     logicaGuardarBaraja(playerDeck);
                     option = printMenu(sc);
                     break;
 
-                case "4":       // --- Cargar Baraja --- //
+                case "4":      // --- Cargar Baraja --- //
                     logicaCargarBaraja(playerDeck);
                     option = printMenu(sc);
                     break;
 
-                case "5":       // --- Gestionar Barajas --- //
-                    logicaGestionarBarajas(sc, playerDeck);
-                    option = printMenu(sc);
-                    break;
-
-                case "6":       // --- PvP --- //
+                case "5":      // --- PvP --- //
                     logicaPvP(barajaJ1, barajaJ2, sc);
                     Methods.flushScreen();
                     option = printMenu(sc);
                     break;
 
-                case "7":       // --- Creditos --- //
+                case "6":      // --- Creditos --- //
                     Methods.flushScreen();
                     Methods.flushScreen();
                     printStudentInfo();
@@ -70,7 +107,7 @@ public class InfortacticsUVa {
                     option = printMenu(sc);
                     break;
 
-                case "8":       // --- Salir --- //
+                case "7":      // --- Salir --- //
                     Methods.flushScreen();
                     System.out.println(PURPLE + BOLD + "¡Hasta luego!" + RESET);
                     exit = true;
@@ -88,36 +125,36 @@ public class InfortacticsUVa {
 
     // ###### METODOS ###### //
     /**
-     * Muestra el menú inicial y lee la opción del usuario.
+     * Muestra el menú inicial de InforTactics UVa y lee la opción del usuario.
      *
-     * @param in Scanner para entrada.
-     * @return Opción seleccionada.
+     * @param in Scanner para la entrada de datos del usuario.
+     * @return La opción seleccionada por el usuario como un String.
      */
     public static String printMenu(Scanner in) {
         System.out.println(YELLOW + BOLD);
         System.out.println("┌─────────────────────────────────┐");
         System.out.println("│      🏯 InforTactics UVa 🏯     │");
         System.out.println("├─────────────────────────────────┤");
-        System.out.println("│   1. Nueva Partida              │");
-        System.out.println("│   2. Configurar Baraja          │");
-        System.out.println("│   3. Guardar Baraja             │");
-        System.out.println("│   4. Cargar Baraja              │");
-        System.out.println("│   5. Gestión Barajas            │");
-        System.out.println("│   6. JcJ                        │");
-        System.out.println("│   7. Créditos                   │");
+        System.out.println("│  1. Nueva Partida               │");
+        System.out.println("│  2. Configurar Baraja           │");
+        System.out.println("│  3. Guardar Baraja              │");
+        System.out.println("│  4. Cargar Baraja               │");
+        System.out.println("│  5. JcJ                         │");
+        System.out.println("│  6. Créditos                    │");
         System.out.println("├─────────────────────────────────┤");
-        System.out.println("│   8. Salir                      │");
+        System.out.println("│  7. Salir                       │");
         System.out.println("└─────────────────────────────────┘");
-        System.out.print("Inserte una opción [1-8]: " + RESET);
+        System.out.print("Inserte una opción [1-7]: " + RESET);
         return in.nextLine();
     }
 
     /**
-     * Logica principal para iniciar la partida e imprime la partida completa
+     * Logica principal para iniciar una partida de un jugador (PvE) contra una
+     * baraja enemiga aleatoria cargada desde el archivo. Imprime el tablero y
+     * los detalles del enemigo antes de comenzar.
      *
-     * @param in Scanner
-     * @param option String
-     * @param playerDeck String[]
+     * @param in Scanner para la entrada de datos.
+     * @param playerDeck La baraja del jugador.
      */
     public static void logicaNuevaPartida(Scanner in, String[] playerDeck) {
         if (hasCharacters(playerDeck)) {
@@ -144,21 +181,22 @@ public class InfortacticsUVa {
     }
 
     /**
-     * Logica para el caso 2 del switch, configurar la baraja del jugador
+     * Logica para el caso de configurar la baraja del jugador. Llama al método
+     * {@code configureDeck} que maneja el bucle de configuración.
      *
-     * @param sc Scanner
-     * @param playerDeck String[]
+     * @param sc Scanner para la entrada de datos.
+     * @param playerDeck Baraja del jugador a configurar.
      */
     public static void logicaConfigurarBaraja(Scanner sc, String[] playerDeck) {
-        configureDeck(sc, playerDeck, "", "oasdfg", "");
+        configureDeck(sc, playerDeck, "Jugador", "oasdfg", ""); // Los últimos 3 parámetros son temporales/no relevantes en este caso de uso.
         Methods.flushScreen();
     }
 
     /**
-     * Logica para guardar la baraja dentro de la ruta
-     * /Barajas/BarajasGuardadas.txt
+     * Logica para guardar la baraja del jugador actual en el archivo
+     * {@code Barajas/BarajaGuardada.txt}.
      *
-     * @param playerDeck String[]
+     * @param playerDeck La baraja del jugador a guardar.
      */
     public static void logicaGuardarBaraja(String[] playerDeck) {
         if (saveDeck(playerDeck)) {
@@ -171,11 +209,10 @@ public class InfortacticsUVa {
     }
 
     /**
-     * Logica para cargar la baraja guardada en el archivo
-     * /Baraja/BarajasGuardadas.txt
+     * Logica para cargar la baraja del jugador desde el archivo
+     * {@code Barajas/BarajaGuardada.txt}.
      *
-     * @param playerDeck String[]
-     * @param elixir int
+     * @param playerDeck La baraja del jugador donde se cargarán los datos.
      */
     public static void logicaCargarBaraja(String[] playerDeck) {
         if (loadDeck(playerDeck)) {
@@ -189,157 +226,13 @@ public class InfortacticsUVa {
     }
 
     /**
-     * Logica para gestionar barajas: guardar, cargar, listar
+     * Logica para la función de partida multijugador (Jugador contra Jugador -
+     * PvP). Solicita los nombres de los jugadores y permite a cada uno
+     * configurar su baraja antes de iniciar el juego.
      *
-     * @param sc Scanner
-     * @param playerDeck String[]
-     */
-    public static void logicaGestionarBarajas(Scanner sc, String[] playerDeck) {
-        boolean back = false;
-        while (!back) {
-            Methods.flushScreen();
-            System.out.println(YELLOW + BOLD);
-            System.out.println("┌─────────────────────────────┐");
-            System.out.println("│     Gestionar Barajas       │");
-            System.out.println("├─────────────────────────────┤");
-            System.out.println("│   1. Guardar Baraja         │");
-            System.out.println("│   2. Cargar Baraja          │");
-            System.out.println("│   3. Listar Barajas         │");
-            System.out.println("│   4. Volver                 │");
-            System.out.println("└─────────────────────────────┘");
-            System.out.print("Inserte una opción [1-4]: ");
-            System.out.print(RESET);
-            String subOption = sc.nextLine();
-            switch (subOption) {
-                case "1":       // --- Guardar Baraja --- //
-                    System.out.print(BOLD + "Introduce un nombre para guardar esta baraja: " + RESET);
-                    String name = sc.nextLine();
-                    if (saveDeckNamed(playerDeck, name)) {
-                        System.out.println(GREEN + BOLD + "Baraja guardada como '" + name + "'." + RESET);
-                    } else {
-                        System.out.println(RED + BOLD + "[ERROR] -> Problema al guardar la baraja." + RESET);
-                    }
-                    System.out.print(YELLOW + BOLD + "Presiona Enter para continuar..." + RESET);
-                    sc.nextLine();
-                    break;
-                case "2":       // --- Cargar Baraja --- //
-                    listDecks();
-                    System.out.print(BOLD + "Introduce el nombre de la baraja que deseas cargar: " + RESET);
-                    String loadName = sc.nextLine();
-                    if (loadDeckNamed(playerDeck, loadName)) {
-                        System.out.println(GREEN + BOLD + "¡Baraja '" + loadName + "' cargada exitosamente!." + RESET);
-                    } else {
-                        System.out.println(RED + BOLD + "[ERROR] -> Problema al cargar la baraja." + RESET);
-                    }
-                    System.out.print(YELLOW + BOLD + "Presiona Enter para continuar..." + RESET);
-                    sc.nextLine();
-                    break;
-                case "3":       // --- Listar Barajas --- //
-                    System.out.println(BOLD + "Barajas guardadas:" + RESET);
-                    listDecks();
-                    System.out.print(YELLOW + BOLD + "Presiona Enter para continuar..." + RESET);
-                    sc.nextLine();
-                    break;
-                case "4":       // --- Volver --- //
-                    back = true;
-                    Methods.flushScreen();
-                    break;
-                default:        // --- Opcion no válida --- //
-                    System.out.println(RED + BOLD + "[ERROR] -> Opción insertada no válida." + RESET);
-                    System.out.print(YELLOW + BOLD + "Presiona Enter para continuar..." + RESET);
-                    sc.nextLine();
-                    break;
-            }
-        }
-    }
-
-    /**
-     * Guarda la baraja con un nombre específico en Barajas/[name].txt.
-     *
-     * @param playerDeck Baraja.
-     * @param name Nombre del archivo.
-     * @return True si exitoso.
-     */
-    public static boolean saveDeckNamed(String[] playerDeck, String name) {
-        String rutaArchivo = "Barajas/" + name + ".txt";
-        try (PrintWriter escribe = new PrintWriter(new FileWriter(rutaArchivo))) {
-            for (int i = 0; i < playerDeck.length; i++) {
-                String p = playerDeck[i];
-                if (p != null && !p.isEmpty()) {
-                    escribe.print(p + " ");
-                }
-            }
-            return true;
-        } catch (IOException e) {
-            System.out.println(RED + BOLD + "Error I/O al guardar la baraja: " + e.getMessage() + RESET);
-            return false;
-        }
-    }
-
-    /**
-     * Carga la baraja con un nombre específico desde Barajas/[name].txt.
-     *
-     * @param playerDeck Baraja a cargar.
-     * @param name Nombre del archivo.
-     * @return True si exitoso.
-     */
-    public static boolean loadDeckNamed(String[] playerDeck, String name) {
-        String filePath = "Barajas/" + name + ".txt";
-        File file = new File(filePath);
-        if (!file.exists()) {
-            System.out.println("Archivo " + filePath + " no encontrado.");
-            return false;
-        }
-        Methods.initializeDeck(playerDeck);
-        try (Scanner fileScanner = new Scanner(file)) {
-            if (fileScanner.hasNextLine()) {
-                String content = fileScanner.nextLine();
-                try (Scanner lineScanner = new Scanner(content)) {
-                    int i = 0;
-                    while (lineScanner.hasNext() && i < playerDeck.length) {
-                        String part = lineScanner.next();
-                        if (part.length() == 3) {
-                            playerDeck[i] = part;
-                        }
-                        i++;
-                    }
-                }
-            }
-            return true;
-        } catch (FileNotFoundException e) {
-            System.out.println("Error al acceder al archivo: " + e.getMessage());
-            return false;
-        }
-    }
-
-    /**
-     * Lista las barajas guardadas en Barajas/.
-     */
-    public static void listDecks() {
-        File dir = new File("Barajas/");
-        if (!dir.exists() || !dir.isDirectory()) {
-            System.out.println("[ERROR] -> Directorio Barajas/ no encontrado.");
-            return;
-        }
-        File[] files = dir.listFiles();
-        if (files == null || files.length == 0) {
-            System.out.println("[ERROR] -> No hay barajas guardadas.");
-            return;
-        }
-        for (int i = 0; i < files.length; i++) {
-            File file = files[i];
-            if (file.isFile() && file.getName().endsWith(".txt")) {
-                String name = file.getName();
-                // Remover .txt del nombre
-                String deckName = name.substring(0, name.length() - 4);
-                System.out.println("- " + deckName);
-            }
-        }
-    }
-
-    /*
-     * Logica para la funcion de pvp (jugador contra jugador)
-     *  
+     * @param barajaJ1 Baraja del Jugador 1.
+     * @param barajaJ2 Baraja del Jugador 2.
+     * @param sc Scanner para la entrada de datos.
      */
     public static void logicaPvP(String[] barajaJ1, String[] barajaJ2, Scanner sc) {
         Methods.initializeDeck(barajaJ1);
@@ -353,7 +246,7 @@ public class InfortacticsUVa {
             configureDeck(sc, barajaJ1, jugador1, jugador1, "");
             if (!hasCharacters(barajaJ1)) {
                 Methods.flushScreen();
-                System.out.print(RED + BOLD + "[ERROR] -> Configura tu baraja antes [J1]" + jugador1 + "!" + RESET);
+                System.out.print(RED + BOLD + "[ERROR] -> Configura tu baraja antes [J1] " + jugador1 + "!" + RESET);
                 sc.nextLine();
                 Methods.flushScreen();
             } else {
@@ -369,7 +262,7 @@ public class InfortacticsUVa {
             configureDeck(sc, barajaJ2, jugador2, jugador1, jugador2);
             if (!hasCharacters(barajaJ2)) {
                 Methods.flushScreen();
-                System.out.println(RED + BOLD + "[ERROR] -> Configura tu baraja antes [J2]" + jugador2 + "!" + RESET);
+                System.out.println(RED + BOLD + "[ERROR] -> Configura tu baraja antes [J2] " + jugador2 + "!" + RESET);
                 sc.nextLine();
                 Methods.flushScreen();
             } else {
@@ -380,7 +273,7 @@ public class InfortacticsUVa {
     }
 
     /**
-     * Muestra informacion sobre los responsables de la practica
+     * Muestra información sobre los autores de la práctica.
      */
     public static void printStudentInfo() {
         System.out.println(BOLD);
@@ -395,13 +288,12 @@ public class InfortacticsUVa {
     }
 
     /**
-     * Imprime la información de los personajes en formato tabular (con emojis)
-     * con alineación mejorada.
+     * Imprime la información detallada de los personajes disponibles en formato
+     * tabular. Incluye nombre, símbolo, coste de elixir, porcentaje de ataque y
+     * porcentaje de defensa.
      */
     public static void printCharactersInfo() {
-
         System.out.println(BOLD + "\nPERSONAJES DISPONIBLES:");
-
         // Encabezado: Reducimos el ancho del Personaje y el Símbolo para reducir el espacio blanco excesivo
         System.out.printf("%-18s %-5s %6s %8s %8s%n", "Personaje", "Símb.", "Elixir", "%Ataque", "%Defensa");
         System.out.println("---------------------------------------------------"); // Longitud ajustada a la nueva suma de anchuras (aprox 48)
@@ -438,12 +330,13 @@ public class InfortacticsUVa {
                 Assets.PK_SYMBOL, Assets.PK_ELIXIR, Assets.PK_ATTACK, Assets.PK_DEFENSE);
 
         System.out.println("---------------------------------------------------" + RESET);
+        //  - Sugerencia de diagrama
     }
 
     /**
-     * Imprime el elixir restante.
+     * Imprime el elixir restante del jugador, destacado con un borde de color.
      *
-     * @param elixir Cantidad de elixir.
+     * @param elixir Cantidad de elixir restante.
      */
     public static void printElixir(int elixir) {
         System.out.println(PURPLE + BOLD + "---------------------------------------------------" + RESET);
@@ -452,10 +345,13 @@ public class InfortacticsUVa {
     }
 
     /**
-     * Procedimiento que muestra el tablero con emojis y alineación ajustada (x=
-     * columna, y= fila). Cada celda tiene un ancho fijo de 4 caracteres.
+     * Procedimiento que muestra el tablero de juego ({@code Assets.BOARD_ROWS}
+     * x {@code Assets.BOARD_COLUMNS}) con personajes colocados y bordes de
+     * color para diferenciar las zonas del enemigo (Rojo) y del jugador (Cian).
+     * Las coordenadas se muestran con la fila (X) y la columna (Y).
      *
-     * @param deck Vector de personajes.
+     * @param deck Vector de personajes (con su posición [SXY]) para colocar en
+     * el tablero.
      */
     public static void printBoard(String[] deck) {
         String[][] board = new String[Assets.BOARD_ROWS][Assets.BOARD_COLUMNS];
@@ -463,7 +359,7 @@ public class InfortacticsUVa {
         for (int i = 0; i < Assets.BOARD_ROWS; i++) {
             for (int j = 0; j < Assets.BOARD_COLUMNS; j++) {
                 String noPosition = "" + Assets.NO_POSITION + Assets.NO_POSITION;
-                board[i][j] = (i < 3) ? noPosition : "";
+                board[i][j] = (i < 3) ? noPosition : ""; // Se asume que las primeras 3 filas son para el enemigo por defecto
             }
         }
 
@@ -514,11 +410,11 @@ public class InfortacticsUVa {
             System.out.println();
             if (i < Assets.BOARD_ROWS - 1) {
                 String interBorderColor;
-                if (i == 2) {// Si i=2, es la línea entre fila 2 y 3 (ahora WHITE)
+                if (i == 2) {// Si i=2, es la línea entre fila 2 y 3 (Línea central)
                     interBorderColor = RESET + BOLD;
                 } else if (i < 2) { // i=0, 1: Bordes internos del enemigo (RED)
                     interBorderColor = RED + BOLD;
-                } else { // i=2 (Línea divisoria principal) o i=4 (Borde interno del jugador)
+                } else { // i=3, 4: Borde interno del jugador (CYAN)
                     interBorderColor = CYAN + BOLD;
                 }
                 System.out.print(interBorderColor + "    ├" + RESET);
@@ -540,12 +436,15 @@ public class InfortacticsUVa {
             }
         }
         System.out.println(colorBottomBorder + "┘" + RESET);
+        //  - Sugerencia de diagrama
     }
 
     /**
-     * Imprime los detalles de la baraja enemiga: emoji, nombre y posición.
+     * Imprime los detalles de la baraja enemiga: emoji, nombre del personaje y
+     * su posición de despliegue en el tablero.
      *
-     * @param enemyDeck Baraja enemiga.
+     * @param enemyDeck Baraja enemiga. Cada elemento es una cadena de 3
+     * caracteres (Símbolo, Fila, Columna).
      */
     public static void printEnemyDeckDetails(String[] enemyDeck) {
         for (int i = 0; i < enemyDeck.length; i++) {
@@ -562,23 +461,39 @@ public class InfortacticsUVa {
     }
 
     /**
-     * Configura la baraja del jugador con validaciones (x= columna, y= fila).
+     * Permite al jugador configurar su baraja, seleccionando personajes y sus
+     * posiciones. Valida el coste de elixir, el formato de entrada, y que la
+     * posición esté dentro de la zona de despliegue permitida (filas 0-2 para
+     * J1/Enemigo, 3-5 para J2/Jugador).
      *
-     * @param in Scanner.
+     * @param in Scanner para la entrada de datos.
      * @param playerDeck Baraja del jugador.
+     * @param jugador Nombre del jugador que está configurando la baraja (usado
+     * para mensajes).
+     * @param jugador1 Nombre del Jugador 1 (para definir zona de despliegue).
+     * @param jugador2 Nombre del Jugador 2 (para definir zona de despliegue).
      */
     public static void configureDeck(Scanner in, String[] playerDeck, String jugador, String jugador1, String jugador2) {
         int currentElixir;
         // Bucle hasta que el usuario decida salir
         boolean finished = false;
         while (!finished) {
-            // Determinar zona permitida según el jugador: Jugador 1 -> filas 0-2, Jugador 2 -> filas 3-5
+            // Determinar zona permitida según el jugador: J1 -> filas 0-2, J2 -> filas 3-5. Por defecto (PvE) es 3-5.
             int minRow = 3;
             int maxRow = 5;
-            if (jugador != null && jugador.equals(jugador1)) {
+            // Se usa el nombre para distinguir si es J1 o J2 en modo PvP, o el jugador por defecto en PvE.
+            // Nota: En PvE, 'jugador' es "Jugador", 'jugador1' es "oasdfg" (lo que hace que caiga en el 'else if' por defecto si solo se usa configureDeck).
+            // La lógica parece forzar la zona de despliegue del jugador siempre a 3-5, a menos que se esté configurando 'jugador1' en PvP.
+
+            // Adaptación de la lógica original: si 'jugador' coincide con 'jugador1' (en PvP)
+            // se asume que J1 juega en las filas 0-2 (zona enemiga en PvE).
+            if (jugador != null && jugador.equals(jugador1) && !jugador1.equals("oasdfg")) {
                 minRow = 0;
                 maxRow = 2;
             } else if (jugador != null && jugador.equals(jugador2)) {
+                minRow = 3;
+                maxRow = 5;
+            } else if (jugador != null && jugador.equals("Jugador")) { // Caso PvE (Opción 2 del menú)
                 minRow = 3;
                 maxRow = 5;
             }
@@ -616,16 +531,17 @@ public class InfortacticsUVa {
                                                 && (playerDeck[i].charAt(2) - '0') == y) {
                                             playerDeck[i] = "";
                                             found = true;
+                                            break; // Personaje borrado, salimos del bucle
                                         }
                                     }
                                     if (!found) { // Posicion vacia
-                                        errorMessage = "[ERROR] -> Posición vacia. Compruebe las coordenadas.";
+                                        errorMessage = "[ERROR] -> Posición vacía. Compruebe las coordenadas.";
                                     }
                                 } else {// Posición fuera de rango
                                     errorMessage = "[ERROR] -> Posición inválida (filas " + minRow + "-" + maxRow + ", columnas 0-5).";
                                 }
                             } else {// Formato inválido
-                                errorMessage = "[ERROR] -> Formato inválido.";
+                                errorMessage = "[ERROR] -> Formato de borrado inválido (Esperado: XY).";
                             }
                             break;
                         case "0":       // --- Guardar y Salir --- //
@@ -639,7 +555,7 @@ public class InfortacticsUVa {
                             break;
                     }
                     break;
-                case 3:     // --- Colocar Personaje --- //
+                case 3:     // --- Colocar Personaje [SXY] --- //
                     char symbol = input.charAt(0); // Personaje
                     if (symbol >= 'a' && symbol <= 'z') {
                         symbol = (char) (symbol - 32); // Convertimos en mayuscula si es minuscula
@@ -648,42 +564,38 @@ public class InfortacticsUVa {
                     int y = (int) input.charAt(2) - '0'; // Y = columna
                     if (isValidSymbol(symbol) && x >= minRow && x <= maxRow && y >= 0 && y <= 5 && currentElixir >= Methods.getCharacterElixir(symbol)) {
                         boolean occupied = false;
-                        int pos = 0;
-                        while (pos < playerDeck.length && !occupied) {
-                            String p = playerDeck[pos];
+                        // Comprobar si la posición ya está ocupada
+                        for (String p : playerDeck) {
                             if (p != null && p.length() == 3 && (p.charAt(1) - '0') == x && (p.charAt(2) - '0') == y) {
                                 occupied = true;
+                                break;
                             }
-                            pos++;
                         }
                         if (!occupied) {
                             int posInsertar = -1;
-                            boolean espacioLibreEncontrado = false;
-
-                            int i = 0;
-                            while (i < playerDeck.length && !espacioLibreEncontrado) {
+                            // Encontrar el primer espacio vacío en el deck
+                            for (int i = 0; i < playerDeck.length; i++) {
                                 if (playerDeck[i] == null || playerDeck[i].isEmpty()) {
                                     posInsertar = i;
-                                    espacioLibreEncontrado = true;
+                                    break;
                                 }
-                                i++;
                             }
                             if (posInsertar != -1) {
                                 String personajeInsertar = "" + symbol + x + y;
                                 playerDeck[posInsertar] = personajeInsertar;
                                 System.out.println(YELLOW + BOLD + "Personaje " + Methods.getCharacterName(symbol) + " colocado en [" + x + "][" + y + "]." + RESET);
                             } else {
-                                System.out.println(RED + BOLD + "[ERROR] -> No es posible insertar el personaje en la baraja." + RESET);
+                                errorMessage = "[ERROR] -> La baraja está llena. Borre un personaje para añadir uno nuevo.";
                             }
                         } else {
-                            errorMessage = "[ERROR] -> Posición ocupada.";
+                            errorMessage = "[ERROR] -> Posición ocupada. Borre el personaje existente con 'X' antes de colocar otro.";
                         }
                     } else {
-                        errorMessage = "[ERROR] -> Jugada inválida o elixir insuficiente (columnas 0-5, filas " + minRow + "-" + maxRow + ").";
+                        errorMessage = "[ERROR] -> Jugada inválida. Revise: 1. Símbolo válido. 2. Elixir suficiente. 3. Posición válida (filas " + minRow + "-" + maxRow + ", columnas 0-5).";
                     }
                     break;
                 default:    // --- Formato inválido --- //
-                    errorMessage = "[ERROR] -> Formato inválido.";
+                    errorMessage = "[ERROR] -> Formato inválido. Use [SXY], [X], o [0].";
                     break;
             }
             if (!errorMessage.isEmpty()) {
@@ -696,10 +608,12 @@ public class InfortacticsUVa {
     }
 
     /**
-     * Calcula el elixir actual basado en personajes colocados.
+     * Calcula el elixir restante basado en el elixir inicial y el coste total
+     * de los personajes actualmente colocados en la baraja.
      *
-     * @param playerDeck Baraja del jugador.
-     * @return elixir Elixir restante.
+     * @param playerDeck Baraja del jugador. Cada elemento es una cadena de 3
+     * caracteres (Símbolo, Fila, Columna).
+     * @return Cantidad de elixir restante.
      */
     public static int calculateCurrentElixir(String[] playerDeck) {
         int used = 0;
@@ -712,10 +626,12 @@ public class InfortacticsUVa {
     }
 
     /**
-     * Verifica si la baraja tiene al menos un personaje.
+     * Verifica si la baraja contiene al menos un personaje colocado (no nulo ni
+     * vacío).
      *
-     * @param deck Baraja.
-     * @return True si tiene personajes.
+     * @param deck La baraja a verificar.
+     * @return {@code true} si la baraja tiene al menos un personaje,
+     * {@code false} en caso contrario.
      */
     public static boolean hasCharacters(String[] deck) {
         for (int i = 0; i < deck.length; i++) {
@@ -727,10 +643,11 @@ public class InfortacticsUVa {
     }
 
     /**
-     * Valida si el símbolo es de un personaje válido.
+     * Valida si el símbolo de un personaje es uno de los símbolos predefinidos.
      *
-     * @param symbol Símbolo.
-     * @return True si válido.
+     * @param symbol Símbolo del personaje (Char).
+     * @return {@code true} si el símbolo es válido, {@code false} en caso
+     * contrario.
      */
     public static boolean isValidSymbol(char symbol) {
         return symbol == Assets.ARCHER_SYMBOL || symbol == Assets.DRAGON_SYMBOL
@@ -739,12 +656,12 @@ public class InfortacticsUVa {
     }
 
     /**
-     * Guarda la baraja en Barajas/BarajaGuardada.txt. Damos por hecho que la
-     * ruta existe ya que se necesita la misma ruta para el archivo de las
-     * barajas enemigas
+     * Guarda la baraja del jugador en el archivo
+     * {@code Barajas/BarajaGuardada.txt}.
      *
-     * @param playerDeck Baraja.
-     * @return True si exitoso.
+     * @param playerDeck La baraja del jugador a guardar.
+     * @return {@code true} si el guardado fue exitoso, {@code false} en caso de
+     * error de I/O.
      */
     public static boolean saveDeck(String[] playerDeck) {
         String rutaArchivo = "Barajas/BarajaGuardada.txt";
@@ -763,10 +680,13 @@ public class InfortacticsUVa {
     }
 
     /**
-     * Carga la baraja desde Barajas/BarajaGuardada.txt.
+     * Carga la baraja del jugador desde el archivo
+     * {@code Barajas/BarajaGuardada.txt}. Los elementos de la baraja deben ser
+     * cadenas de 3 caracteres (Símbolo, Fila, Columna).
      *
-     * @param playerDeck Baraja a cargar.
-     * @return True si exitoso.
+     * @param playerDeck La baraja del jugador donde se cargarán los datos.
+     * @return {@code true} si la carga fue exitosa, {@code false} si el archivo
+     * no existe o hay error de I/O.
      */
     public static boolean loadDeck(String[] playerDeck) {
         final String filePath = "Barajas/BarajaGuardada.txt";
@@ -802,11 +722,13 @@ public class InfortacticsUVa {
     }
 
     /**
-     * Carga una baraja enemiga aleatoria desde Barajas/BarajasEnemigas.txt.
-     * Mapea Y >=3 a filas enemigas (0-2) para compatibilidad con el nuevo
-     * sistema de ejes.
+     * Carga una baraja enemiga aleatoria desde el archivo
+     * {@code Barajas/BarajasEnemigas.txt}. Selecciona una línea aleatoria del
+     * archivo y la parsea en el formato de baraja.
      *
-     * @return Baraja enemiga o null si error.
+     * @return Un array de Strings que representa la baraja enemiga, o
+     * {@code null} si hay un error al acceder al archivo o si el archivo está
+     * vacío.
      */
     public static String[] loadRandomEnemyDeck() {
         final String filePath = "Barajas/BarajasEnemigas.txt";
@@ -863,12 +785,13 @@ public class InfortacticsUVa {
         Methods.initializeDeck(enemyDeck);
         try (Scanner lineScanner = new Scanner(selectedLine)) {
             int i = 0;
-            while (lineScanner.hasNext() && i < Assets.INITIAL_ELIXIR) {
+            while (lineScanner.hasNext() && i < enemyDeck.length) {
                 String part = lineScanner.next();
                 if (part.length() == 3) {
                     char symbol = part.charAt(0);
                     int x = part.charAt(1) - '0'; // x = Fila
                     int y = part.charAt(2) - '0'; // y = Columna
+                    // Asumiendo que el formato en el archivo es [SXY]
                     enemyDeck[i] = "" + symbol + x + y;
                 }
                 i++;
