@@ -242,6 +242,7 @@ public class InfortacticsUVa {
                     break;
                 case "4":       // --- Volver --- //
                     back = true;
+                    Methods.flushScreen();
                     break;
                 default:        // --- Opcion no válida --- //
                     System.out.println(RED + BOLD + "[ERROR] -> Opción insertada no válida." + RESET);
