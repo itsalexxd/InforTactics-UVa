@@ -1,16 +1,41 @@
 # 🃏 InforTactics-UVa
 
-## 📚 Práctica de Fundamentos de Programación (FPRO) - Curso 25-26
+## 📚 Práctica de Fundamentos de Programación (FPRO) - Universidad de Valladolid (UVa)
 
-Este repositorio aloja la implementación del proyecto para la asignatura de **Fundamentos de Programación (FPRO)**, impartida en la **Universidad de Valladolid (UVa)** durante el curso académico 2025-2026.
-
-**InforTactics-UVa** es una aplicación desarrollada en Java que simula y gestiona un sistema de batallas tácticas basadas en mazos de cartas, siguiendo los requisitos específicos detallados en el enunciado de la práctica.
+Este repositorio aloja la implementación del proyecto para la asignatura de **Fundamentos de Programación (FPRO)**, desarrollada para el curso académico 2025-2026 en la Universidad de Valladolid.
 
 ---
 
-## ✨ Características Principales
+## 👥 Autores del Proyecto
 
-* **Gestión de Mazos:** Carga y manejo de cartas y mazos.
+La práctica fue realizada por los siguientes alumnos:
+
+* **Alejandro Garcia Lavandera**
+* **Beltran Gil Esteban**
+
+---
+
+## 📄 Archivos Clave del Proyecto
+
+Este proyecto está compuesto por varios archivos que cumplen roles específicos, siendo los más relevantes:
+
+| Archivo | Descripción |
+| :--- | :--- |
+| **`Enunciado.pdf`** | **Documento del Enunciado del Proyecto.** Contiene la descripción oficial, los requisitos detallados y las especificaciones completas de la práctica de FPRO. |
+| **`InfortacticsUVa.java`** | **Práctica en Cuestión (Clase Principal).** Este archivo contiene la implementación principal del proyecto en Java. Aloja el método `main()` y toda la lógica de interacción inicial (menús, gestión del flujo del programa, etc.) necesaria para la simulación del sistema de batallas tácticas. |
+| `Assets.java` | Clase dedicada a la gestión de recursos estáticos, como la lectura y carga de datos desde archivos. |
+| `Methods.java` | Colección de métodos auxiliares y funciones de utilidad empleados en el proyecto. |
+| `Barajas/` | Carpeta destinada a las clases relacionadas con la definición de las entidades del juego (`Carta`, `Mazo`, etc.). |
+
+---
+
+## ✨ Descripción del Proyecto
+
+**InforTactics-UVa** es una aplicación desarrollada en Java que simula y gestiona un sistema de batallas tácticas basado en mazos de cartas, cumpliendo con los requisitos específicos detallados en el enunciado de la práctica.
+
+### Características Principales
+
+* **Gestión de Mazos:** Carga y manejo de cartas y mazos de jugadores y enemigos.
 * **Simulación de Batalla:** Lógica de juego para enfrentar mazos de jugadores contra mazos enemigos.
 * **Manejo de Archivos:** Lectura de datos de entrada para la configuración de enemigos.
 
@@ -18,23 +43,8 @@ Este repositorio aloja la implementación del proyecto para la asignatura de **F
 
 ## 🛠️ Tecnologías
 
-El proyecto fue desarrollado utilizando las siguientes herramientas:
-
 * **Lenguaje de Programación:** Java
 * **Compilación y Ejecución:** JDK (versión requerida por la asignatura)
-
----
-
-## 📂 Estructura del Repositorio
-
-| Fichero/Carpeta | Descripción |
-| :--- | :--- |
-| `InfortacticsUVa.java` | **Clase Principal.** Contiene el método `main()` y la lógica de interacción inicial (menú, etc.). |
-| `Assets.java` | Clase dedicada a la gestión de recursos estáticos, como la lectura y carga de datos desde archivos. |
-| `Methods.java` | Colección de métodos auxiliares y funciones de utilidad utilizadas por las clases principales. |
-| `Barajas/` | Carpeta destinada a las clases relacionadas con la definición de las entidades del juego (`Carta`, `Mazo`, etc.). |
-| `BarajasEnemigas.txt` | **Archivo de Datos de Entrada.** Contiene la información estructurada de los mazos enemigos para la simulación. |
-| `Enunciado.pdf` | Documento con la **descripción oficial** y todos los requisitos de la práctica. |
 
 ---
 
